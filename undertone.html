@@ -43,7 +43,7 @@ window._spad = {
 			var givslyDiv = document.createElement('givsly-good-ad');
             givslyDiv.setAttribute('id', `givslyA`);
 			givslyDiv.setAttribute('trigger', 'good-ad-hrz-light');
-			givslyDiv.setAttribute('ad-selector', '#div_' + id + '_0');
+			givslyDiv.setAttribute('ad-selector', '#bottomAdhesionPortraitCollapsed');
 			givslyDiv.setAttribute('ad-size', 'full-screen');
 			givslyDiv.setAttribute('trigger-pos', 'top-left');
 			givslyDiv.setAttribute('config-uri',  'https://cdn.givsly.com/configs/UNDR/jGL4T6U63yp-1.json');
@@ -69,30 +69,6 @@ a.parentNode.insertBefore(s, a);
 
 <img src="data:image/png,sparkflow" style="display:none" onerror="(function (a) {
 var getVar=function(a,d){var r=10,t=a[d];try{for(;!t&&a.parent.self!==a.self&&void 0!==a.parent.document&&a.parent.document.body&&r--;)t=(a=a.parent)[d]}catch(a){}return t},fixParam=function(a){return window.btoa(JSON.stringify(a)).replace(/\+/g,'-').replace(/\//g,'_').replace(/\=+$/,'')},q_udms=getVar(window,'ut_udms'),q_extra_data=getVar(window,'ut_extra_data'),q_rid='{id}';q_udms?(q_udms.udms&&'{i'+'d}'!==q_udms.udms.rid&&'{i'+'d}'===q_rid&&(q_rid=q_udms.udms.rid),q_udms=fixParam(q_udms)):q_udms='';var q_querystring=(q_rid||'')+'&udms_encode='+(q_udms||'')+'&macro_encode='+((q_extra_data=q_extra_data?fixParam(q_extra_data):'')||'');
-
-window._spad = {
-	callbacks:{
-		ready:function(id){
-            console.log('Second Tag')
-            secondID = id
-			var givslyDiv = document.createElement('givsly-good-ad');
-			givslyDiv.setAttribute('id', `givslyB`);
-			givslyDiv.setAttribute('trigger', 'good-ad-vrt-light');
-			givslyDiv.setAttribute('ad-selector', '#div_' + id + '_0');
-			givslyDiv.setAttribute('ad-size', 'full-screen');
-			givslyDiv.setAttribute('trigger-pos', 'top-left');
-			givslyDiv.setAttribute('config-uri',  'https://cdn.givsly.com/configs/UNDR/jGL4T6U63yp-1.json');
-			givslyDiv.setAttribute('style', 'z-index:2147483647;');
-			window.document.body.appendChild(givslyDiv);	
-			var givslyScr = document.createElement('script');
-			givslyScr.setAttribute('src','https://cdn.givsly.com/ga/good_ads.min.js');
-			givslyScr.setAttribute('type','module');
-			givslyScr.setAttribute('defer','defer');
-			window.document.body.appendChild(givslyScr);	
-		}
-	}
-};
-
 var s = document.createElement('script');
 s.src = 'https://ads.sparkflow.net?g=92214&x='+(typeof q_querystring !== 'undefined'?q_querystring:'')+'&r='+Math.round(Math.random()*99999);
 s.async = true;
