@@ -32,6 +32,8 @@ window._spad = {
 	callbacks:{
 		ready:function(id){
 			var givslyDiv = document.createElement('givsly-good-ad');
+            givslyDiv.setAttribute('id', 'givslyA' + id + '_0');
+			givslyDiv.setAttribute('trigger', 'good-ad-hrz-light');
 			givslyDiv.setAttribute('ad-selector', '#div_' + id + '_0');
 			givslyDiv.setAttribute('ad-size', 'full-screen');
 			givslyDiv.setAttribute('trigger-pos', 'top-left');
@@ -63,10 +65,11 @@ window._spad = {
 	callbacks:{
 		ready:function(id){
 			var givslyDiv = document.createElement('givsly-good-ad');
+			givslyDiv.setAttribute('id', 'givslyB' + id + '_0');
+			givslyDiv.setAttribute('trigger', 'good-ad-hrz-light');
 			givslyDiv.setAttribute('ad-selector', '#div_' + id + '_0');
 			givslyDiv.setAttribute('ad-size', 'full-screen');
-			givslyDiv.setAttribute('trigger', 'good-ad-hrz-dark');
-			givslyDiv.setAttribute('trigger-pos', 'top-left');
+			givslyDiv.setAttribute('trigger-pos', 'bottom-right');
 			givslyDiv.setAttribute('config-uri',  'https://cdn.givsly.com/configs/UNDR/jGL4T6U63yp-1.json');
 			givslyDiv.setAttribute('style', 'z-index:2147483647;');
 			window.document.body.appendChild(givslyDiv);	
