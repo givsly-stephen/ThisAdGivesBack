@@ -37,7 +37,7 @@ var getVar=function(a,d){var r=10,t=a[d];try{for(;!t&&a.parent.self!==a.self&&vo
 window._spad = {
 	callbacks:{
 		ready:function(id){
-            console.log('First Tag', id)
+            console.log('callbacks.ready', id)
             firstID = id
 			var givslyDiv = document.createElement('givsly-good-ad');
             givslyDiv.setAttribute('id', `givslyA`);
@@ -76,18 +76,6 @@ a.parentNode.insertBefore(s, a);
 </div>
 
 <script>
-
-    setTimeout(function () {
-        console.log(">>", firstID, secondID)
-
-        let items = window.document.getElementsByTagName("givsly-good-ad")
-
-        for(let i = 0;i < items.length; i++)  {
-            console.log(items[i]);
-        }
-
-    }, 2000);
-
     window.onSparkflowPubfixReady = window.onSparkflowPubfixReady || [];
     onSparkflowPubfixReady.push(function () {
         $('.scroll').show();
@@ -99,6 +87,20 @@ a.parentNode.insertBefore(s, a);
         }
     });
 </script>
+
+<script>
+        setInterval(function () {
+        console.log(">>", firstID, secondID)
+
+        let items = window.document.getElementsByTagName("givsly-good-ad")
+
+        for(let i = 0;i < items.length; i++)  {
+            console.log(items[i]);
+        }
+
+    }, 2000);
+</script>
+
 <div id="header">
     <div class="inner">
         <img src="https://ops-cdn.undertone.com/images/utlogo.png" alt="Undertone Tag Generator" id="logo">
