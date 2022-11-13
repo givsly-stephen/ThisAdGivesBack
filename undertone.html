@@ -11,7 +11,6 @@
     <script>
         var firstID = "";
         var secondID = "";
-        
     </script>
     
     <script>
@@ -38,12 +37,12 @@ var getVar=function(a,d){var r=10,t=a[d];try{for(;!t&&a.parent.self!==a.self&&vo
 window._spad = {
 	callbacks:{
 		ready:function(id){
-            console.log('First Tag')
+            console.log('First Tag', id)
             firstID = id
 			var givslyDiv = document.createElement('givsly-good-ad');
             givslyDiv.setAttribute('id', `givslyA`);
 			givslyDiv.setAttribute('trigger', 'good-ad-hrz-light');
-			givslyDiv.setAttribute('ad-selector', '#bottomAdhesionPortraitCollapsed');
+			givslyDiv.setAttribute('ad-selector', '#div_' + id + '_0');
 			givslyDiv.setAttribute('ad-size', 'full-screen');
 			givslyDiv.setAttribute('trigger-pos', 'top-left');
 			givslyDiv.setAttribute('config-uri',  'https://cdn.givsly.com/configs/UNDR/jGL4T6U63yp-1.json');
@@ -58,7 +57,7 @@ window._spad = {
 	}
 };
 var s = document.createElement('script');
-s.src = 'https://ads.sparkflow.net?g=93433&x='+(typeof q_querystring !== 'undefined'?q_querystring:'')+'&r='+Math.round(Math.random()*99999);
+s.src = 'https://ads.sparkflow.net?g=93433&x=' + (typeof q_querystring !== 'undefined' ? q_querystring : '')+'&r='+Math.round(Math.random()*99999);
 s.async = true;
 a.parentNode.insertBefore(s, a);
 })(this);"/>
