@@ -2310,7 +2310,7 @@ function(a, t) {
         "version": "107.0.0.0"
     },
     "placement": [640, 120],
-    "close": "//creative-p.undertone.com/sparkflow/cb.png",
+    "close": "https://creative-p.undertone.com/sparkflow/cb.png",
     "file": [{
         "src": "//creative-p.undertone.com/1149/99859-1664985740/m215-0.html",
         "width": 640,
