@@ -20,5 +20,18 @@
   </givsly-good-ad>
 
   <script src="https://cdn.givsly.com/ga/good_ads.min.js" type="module"></script>
+
+  <script>
+    window.addEventListener("givsly-good-ad-npo-chosen", (e) => {
+      console.log("NPO_CHOSEN", e.detail.elementRef.adSelector)
+    });
+    window.addEventListener("givsly-good-ad-expanded", (e) => {
+      console.log("EXPANDED", e.detail.elementRef.adSelector)
+    });
+    window.addEventListener("givsly-good-ad-closed", (e) => {
+      console.log("CLOSED", e.detail.elementRef.adSelector)
+    });
+  </script>
+
 </body>
 </html>
