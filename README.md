@@ -1,12 +1,6 @@
-# ThisAdGivesBack
-ThisAdGivesBack
 
-# Github Page
-https://givsly-stephen.github.io/ThisAdGivesBack/A18193bZ93/index.html
+# Demo Page
+https://givsly-stephen.github.io/ThisAdGivesBack/demo.html
 
-https://givsly-stephen.github.io/ThisAdGivesBack/undertone.html
-
-
-https://creative-s.undertone.com/spk-public/test/givsly.html
 
 
