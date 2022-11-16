@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <base href="/ga/"/>
+    <style>
+      .ad {
+        position: relative;
+        background-color: #dadada;
+        display: flex;
+      }
+
+      body {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <givsly-good-ad
+      trigger="good-ad-hrz-dark"
+      trigger-pos="top-right"
+      ad-size="300x250"
+      config-uri="https://cdn.givsly.com/configs/UNDR/loreal-pre-jgeEp2n9hYj-1.json"
+      ad-selector="#test-parent"
+    ></givsly-good-ad>
+    <div class="info">
+      <div class="ad" >
+        <img src="bg.jpg" alt="Dunkin ad!" width="320" style="object-fit: cover;" />
+        <givsly-good-ad
+          trigger="tagb-vrt-dark"
+          trigger-pos="top-left"
+          ad-size="full-screen"
+          config-uri="https://cdn.givsly.com/configs/UNDR/loreal-pre-jgeEp2n9hYj-1.json"
+        ></givsly-good-ad>
+      </div>
+      <h3>3 NPO configuration</h3>
+    </div>
+    <div class="info">
+      <div class="ad">
+        <img src="bg.jpg" alt="Dunkin ad!" width="300" />
+        <givsly-good-ad
+          trigger="tagb-vrt-light"
+          trigger-pos="bottom-left"
+          ad-size="auto"
+          config-uri="https://cdn.givsly.com/configs/INBI/jgdNQPsWKJr-1.json"
+        ></givsly-good-ad>
+      </div>
+      <h3>1 NPO configuration</h3>
+    </div>
+    <div class="info">
+      <iframe
+        src="ad.html"
+        width="300"
+        style="border: none"
+        height="496"
+        scrolling="no"
+      ></iframe>
+      <h3>This is rendered into iframe</h3>
+    </div>
+    <script src="https://cdn.givsly.com/ga/good_ads.min.js" type="module"></script>
+    <script>
+      function generateLazyAd(id) {
+        const info = document.createElement("div");
+        info.classList.add("info");
+        const parent = document.createElement("div");
+        parent.classList.add("ad");
+        if (id) {
+          parent.id = id;
+        }
+        const img = document.createElement("img");
+        img.width = 300;
+        img.src = "bg.jpg";
+
+        const title = document.createElement("h3");
+        title.innerText = "This is added with 100ms delay";
+
+        parent.appendChild(img);
+        info.appendChild(parent);
+        info.appendChild(title);
+        setTimeout(() => {
+          document.body.appendChild(info);
+        }, 1000);
+      }
+      generateLazyAd("test-parent");
+      window.addEventListener("givsly-good-ad-expanded", console.log);
+      window.addEventListener("givsly-good-ad-npo-chosen", console.log);
+      window.addEventListener("givsly-good-ad-closed", console.log);
+    </script>
+  </body>
+</html>
+
