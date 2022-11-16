@@ -1,8 +1,8 @@
 { 
     "brand": "Zaxby's",
     "thanks": {
-        "title": "This is a Good Ad",
-        "message": "With every ad that is delivered with the Good Ad icon, a portion of the advertising investment goes to support nonprofits in need. For this campaign Zaxby's have chosen to support Feeding America."
+        "title": "",
+        "message": "With every ad that is delivered with the {{type}} icon, a portion of the advertising investment goes to support nonprofits in need. For this campaign Zaxby's have chosen to support {{npo}}."
     },
     "events": {
         "open": "https://givslyga.com/TEAD/jGodKTt3zUv?srv=teads&at=tagb&t=tagb&tid=teads.com&cid=jGodKTt3zUv&lid=2&exp=1983571200&sgn=MWQxODJhZj",
