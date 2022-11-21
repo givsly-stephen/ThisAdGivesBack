@@ -1,0 +1,54 @@
+<script src="mraidview-bridge.js"></script>
+<script src="mraid-main.js"></script>
+<script src="mraid.js"></script>
+    <div class="celtra-ad-v3">
+        <!-- eas.JEFEX1NMT1Q%3D                             = raw $AD_SLOT -->
+        <!-- eas.JERFVklDRV9NT0RFTA%3D%3D                   = raw $DEVICE_MODEL -->
+        <!-- eas.JEVYUElSRVM%3D                             = raw $EXPIRES -->
+        <!-- eas.JE9T                                       = raw $OS -->
+        <!-- eas.JFBMQUNFTUVOVF9UWVBF                       = raw $PLACEMENT_TYPE -->
+        <!-- eas.JFNJR05BVFVSRQ%3D%3D                       = raw $SIGNATURE -->
+        <!-- eas.JFVB                                       = raw $UA -->
+        <!-- eas.JFVTRVJfSVA%3D                             = raw $USER_IP -->
+        <!-- externalBundleId                               = raw $SITE_APP_ID -->
+        <!-- externalCampaignId                             = raw $CAMPAIGN_ID -->
+        <!-- externalCampaignName                           = raw $CAMPAIGN_NAME -->
+        <!-- externalCreativeName                           = raw $CREATIVE_NAME -->
+        <!-- externalPlacementId                            = raw $STRATEGY_ID -->
+        <!-- externalPlacementName                          = raw $STRATEGY_NAME -->
+        <!-- externalSessionId                              = raw $IMP_ID -->
+        <!-- externalSiteName                               = raw $SITE_NAME -->
+        <!-- gpsLat                                         = raw $GEO_LAT -->
+        <!-- gpsLng                                         = raw $GEO_LNG -->
+        <!-- track.creativeLoads                            = raw $HTML_ESC_BEACON_URL?m=1 -->
+        <!-- track.creativeShowsWithMeasurableViewability00 = raw $HTML_ESC_BEACON_URL?m=18 -->
+        <img src="data:image/png,celtra" style="display: none" onerror="
+            (function(img) {
+                var params = {'clickUrl':'$JS_ESC_CLICK_URL','clickEvent':'advertiser','externalAdServer':'InMobiDSP','tagVersion':'html-standard-7'};
+                [].slice.apply(img.parentNode.childNodes).forEach(function(n) { var decfs = { urldecode: decodeURIComponent, htmldecode: function(v) { var d = document.createElement('div'); d.innerHTML = v; return d.textContent; }, eval: function(v) { return eval(v); }, raw: function(v) { return v; } }; var m; if (n.nodeType == 8 &amp;&amp; (m = n.textContent.match(/^&#92;s+([&#92;w%.]+)(&#92;[.+&#92;])?&#92;s+=&#92;s+(&#92;w+)&#92;s+(.*)$/i))) { try { params[m[1]+(m[2] || '')] = decfs[m[3]](m[4].replace(/^&#92;s+|&#92;s+$/g, '')); } catch (e) {} } });
+                var req = document.createElement('script');
+                req.id = params.scriptId = 'celtra-script-' + (window.celtraScriptIndex = (window.celtraScriptIndex||0)+1);
+                params.clientTimestamp = new Date/1000;
+                params.clientTimeZoneOffsetInMinutes = new Date().getTimezoneOffset();
+                params.hostPageLoadId=window.celtraHostPageLoadId=window.celtraHostPageLoadId||(Math.random()+'').slice(2);
+                var qs = '';
+                for (var k in params) {
+                    qs += '&amp;' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+                }
+                var src = 'https://ads.celtra.com/b3acfcf5/mraid-ad.js?' + qs;
+                req.src = src;
+                img.parentNode.insertBefore(req, img.nextSibling);
+            })(this);
+        "/>
+    </div>
+
+<givsly-good-ad
+ad-selector=".celtra-screen-container"
+style="z-index: 9999999999"
+ad-size="300x250"
+trigger="good-ad-hrz-light"
+trigger-pos="bottom-right" config-uri="https://cdn.givsly.com/configs/INBI/jgdNQPsWKJr-1.json" />
+</givsly-good-ad>
+
+<script src="https://cdn.givsly.com/ga/good_ads.min.js" type="module" defer="defer"></script>
+

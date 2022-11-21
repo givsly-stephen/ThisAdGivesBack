@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .ad {
+        position: relative;
+        background-color: #dadada;
+        display: flex;
+      }
+
+      body {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin: 16px;
+      }
+    </style>
+  </head>
+  <body>
+ 
+    
+
+    <div class="info">
+      <div class="ad" >
+        <img src="bg.jpg" alt="Maybeline ad!" width="320" style="object-fit: cover;" />
+        <givsly-good-ad
+          trigger="tagb-vrt-dark"
+          trigger-pos="top-left"
+          ad-size="full-screen"
+          config-uri="https://cdn.givsly.com/configs/UNDR/jgv0z3DBr3C-2.json"
+        ></givsly-good-ad>
+      </div>
+      <h3>Maybeline Line 2</h3>
+    </div>
+
+    <div class="info">
+      <div class="ad" >
+        <img src="bg.jpg" alt="Maybeline ad!" width="320" style="object-fit: cover;" />
+        <givsly-good-ad
+          trigger="tagb-vrt-dark"
+          trigger-pos="top-left"
+          ad-size="full-screen"
+          config-uri="https://cdn.givsly.com/configs/UNDR/jgv0z3DBr3C-3.json"
+        ></givsly-good-ad>
+      </div>
+      <h3>Maybeline Line 3</h3>
+    </div>
+    
+    <script src="https://cdn.givsly.com/ga/good_ads.min.js" type="module"></script>
+
+  </body>
+</html>
+
