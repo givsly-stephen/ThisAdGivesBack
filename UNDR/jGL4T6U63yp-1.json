@@ -1,12 +1,12 @@
 { 
     "brand": "Maybelline",
     "selection": {
-        "title": "",
-        "message": "With this campaign Maybelline is donating a portion of our media spend to the following nonprofits. Select your favorite nonprofit and help Maybelline make a donation!"
+        "title": "Select your favorite nonprofit",
+        "message": "With this campaign Maybelline New York is donating a portion of our media spend to the following nonprofits. Select your favorite nonprofit and help Maybelline New York make a donation!"
     },
     "thanks": {
         "title": "Thank you for your input!",
-        "message": "Maybelline will be making a donation to {{npo}}."
+        "message": "Maybelline New York will be making a donation to {{npo}}."
     },
     "events": {
         "open": "https://givslyga.com/UNDR/jgeEp2n9hYj?srv=ut&at=tagb&t=tagb&tid=undertone.com&cid=jgeEp2n9hYj&lid=1&exp=1988236799&sgn=NjljYTBkYz",
