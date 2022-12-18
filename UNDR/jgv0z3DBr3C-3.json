@@ -2,7 +2,11 @@
     "brand": "Maybelline New York",
     "selection": {
         "title": "Select your favorite nonprofit",
-        "message": "With this campaign Maybelline New York is donating a portion of our media spend to the following nonprofits. Select your favorite nonprofit and help Maybelline New York make a donation!"
+        "message": "With this campaign Maybelline New York is donating a portion of our media spend to the following nonprofits. Select your favorite nonprofit and help Maybelline New York make a donation!",
+        "labelBackgroundColor": "#343A40",
+        "labelColor": "#FFF",
+        "borderColor": "#343A40",
+        "categoryColor": "#ADB5BD"
     },
     "thanks": {
         "title": "Thank you for your input!",
