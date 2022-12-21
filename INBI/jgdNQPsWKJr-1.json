@@ -1,5 +1,9 @@
 { 
-    "brand": "",
+    "brand": "Inmobi test",
+    "selection": {
+        "title": "Select your favorite nonprofit",
+        "message": "With this campaign Inmobi test is donating a portion of our media spend to the following nonprofits. Select your favorite nonprofit and help Inmobi test make a donation!"
+    },
     "thanks": {
         "title": "",
         "message": "With every ad that is delivered with the {{type}} icon, a portion of the advertising investment goes to support nonprofits in need. For this campaign, the brand has chosen to support {{npo}}."
