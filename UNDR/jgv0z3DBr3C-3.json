@@ -13,8 +13,8 @@
         "message": "Maybelline New York will be making a donation to {{npo}}."
     },
     "events": {
-        "open": "https://givslyga.com/UNDR/jgv0z3DBr3C?srv=ut&at=tagb&t=tagb&tid=undertone.com&cid=jgv0z3DBr3C&lid=3&exp=1988236799&sgn=MDIzODc0Nz",
-        "npo": "https://givslyga.com/UNDR/jgv0z3DBr3C?srv=ut&at=tagb&t=npo&tid=undertone.com&cid=jgv0z3DBr3C&lid=3&exp=1988236799"
+        "open": "https://e.dev.givsly.com/UNDR/jgv0z3DBr3C?srv=ut&at=tagb&t=tagb&tid=undertone.com&cid=jgv0z3DBr3C&lid=3&exp=1988236799&sgn=MDIzODc0Nz",
+        "npo": "https://e.dev.givsly.com/UNDR/jgv0z3DBr3C?srv=ut&at=tagb&t=npo&tid=undertone.com&cid=jgv0z3DBr3C&lid=3&exp=1988236799"
     },
     "npos": [ 
         { 

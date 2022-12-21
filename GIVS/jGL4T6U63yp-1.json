@@ -13,8 +13,8 @@
         "message": "By you indicating a choice of your favorite nonprofit between 10/01/2022 and 12/31/2022, Givsly test will donate $0.01 for every completed thousand selections for a total max donation of $100 over the duration of the campaign to the nonprofits mentioned in this ad. Donations are distributed based on the end user selection spread percentage over the nonprofits."
     },
     "events": {
-        "open": "https://givslyga.com/UNDR/jGL4T6U63yp?srv=ut&at=tagb&t=open&tid=undertone.com&cid=jGL4T6U63yp&lid=1&exp=2295734400",
-        "npo": "https://givslyga.com/UNDR/jGL4T6U63yp?srv=ut&at=tagb&t=npo&tid=undertone.com&cid=jGL4T6U63yp&lid=1&exp=2295734400"
+        "open": "https://e.dev.givsly.com/UNDR/jGL4T6U63yp?srv=ut&at=tagb&t=open&tid=undertone.com&cid=jGL4T6U63yp&lid=1&exp=2295734400",
+        "npo": "https://e.dev.givsly.com/UNDR/jGL4T6U63yp?srv=ut&at=tagb&t=npo&tid=undertone.com&cid=jGL4T6U63yp&lid=1&exp=2295734400"
     },
     "npos": [ 
         { 

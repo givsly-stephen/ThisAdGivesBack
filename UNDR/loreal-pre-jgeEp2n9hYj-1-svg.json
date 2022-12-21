@@ -9,8 +9,8 @@
         "message": "Maybelline will be making a donation to {{npo}}."
     },
     "events": {
-        "open": "https://givslyga.com/UNDR/jgeEp2n9hYj?srv=ut&at=tagb&t=tagb&tid=undertone.com&cid=jgeEp2n9hYj&lid=1&exp=1988236799&sgn=NjljYTBkYz",
-        "npo": "https://givslyga.com/UNDR/jgeEp2n9hYj?srv=ut&at=tagb&t=npo&tid=undertone.com&cid=jgeEp2n9hYj&lid=1&exp=1988236799"
+        "open": "https://e.dev.givsly.com/UNDR/jgeEp2n9hYj?srv=ut&at=tagb&t=tagb&tid=undertone.com&cid=jgeEp2n9hYj&lid=1&exp=1988236799&sgn=NjljYTBkYz",
+        "npo": "https://e.dev.givsly.com/UNDR/jgeEp2n9hYj?srv=ut&at=tagb&t=npo&tid=undertone.com&cid=jgeEp2n9hYj&lid=1&exp=1988236799"
     },
     "npos": [ 
         { 

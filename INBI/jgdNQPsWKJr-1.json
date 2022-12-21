@@ -5,7 +5,7 @@
         "message": "With every ad that is delivered with the {{type}} icon, a portion of the advertising investment goes to support nonprofits in need. For this campaign, Storck has chosen to support {{npo}}."
     },
     "events": {
-        "open": "https://givslyga.com/INBI/jgdNQPsWKJr?srv=celtra&at=tagb&t=tagb&tid=inmobi.com&cid=jgdNQPsWKJr&lid=1&exp=1983571200&sgn=NDNhYTljOW",
+        "open": "https://e.dev.givsly.com/INBI/jgdNQPsWKJr?srv=celtra&at=tagb&t=tagb&tid=inmobi.com&cid=jgdNQPsWKJr&lid=1&exp=1983571200&sgn=NDNhYTljOW",
         "npo": ""
     },
     "npos": [ 
