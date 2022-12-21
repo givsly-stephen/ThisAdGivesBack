@@ -9,8 +9,8 @@
         "message": "With every ad that is delivered with the {{type}} icon, a portion of the advertising investment goes to support nonprofits in need. For this campaign, the brand has chosen to support {{npo}}."
     },
     "events": {
-        "open": "https://givslyga.com/INBI/jgdNQPsWKJr?srv=celtra&at=tagb&t=tagb&tid=inmobi.com&cid=jgdNQPsWKJr&lid=1&exp=1983571200&sgn=NDNhYTljOW",
-        "npo": "https://givslyga.com/INBI/jgdNQPsWKJr?srv=celtra&at=tagb&t=npo&tid=inmobi.com&cid=jgdNQPsWKJr&lid=1&exp=1983571200"
+        "open": "https://e.dev.givsly.com/INBI/jgdNQPsWKJr?srv=celtra&at=tagb&t=tagb&tid=inmobi.com&cid=jgdNQPsWKJr&lid=1&exp=1983571200&sgn=NDNhYTljOW",
+        "npo": "https://e.dev.givsly.com/INBI/jgdNQPsWKJr?srv=celtra&at=tagb&t=npo&tid=inmobi.com&cid=jgdNQPsWKJr&lid=1&exp=1983571200"
     },
     "npos": [ 
         { 
