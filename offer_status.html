@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="refresh" content="60">
+    <title>Offer Status</title>
+    <style>
+      body, html {
+          margin: 0;
+          padding: 0;
+          font-family: Arial, sans-serif;
+          height: 100%;
+      }
+      .container {
+          text-align: center;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+      }
+      .offer-name {
+          font-size: 2em;
+          font-weight: bold;
+      }
+      .timeframe-selector button {
+          margin: 0.5em;
+          padding: 0.5em 1em;
+          font-size: 1em;
+      }
+      .statistics {
+          font-size: 1.5em;
+      }
+      .label {
+          display: block;
+          font-size: 0.7em;
+      }
+      .value {
+          font-size: 1.2em;
+      }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="offer-name"></h1>
+        
+        <div class="timeframe-selector">
+            <button data-timeframe="all">All</button>
+            <button data-timeframe="day">Today</button>
+            <button data-timeframe="hour">Past Hour</button>
+        </div>
+        
+        <div class="statistics">
+            <div class="statistic">
+                <span class="label">SCANS</span>
+                <span class="value" id="scans">0</span>
+            </div>
+            <div class="statistic">
+                <span class="label">RESPONSES</span>
+                <span class="value" id="responses">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentParams = new URLSearchParams(window.location.search);
+
+        // Function to fetch data and update the page
+        async function fetchData(timeframe) {
+            if (timeframe) {
+                currentParams.set('timeframe', timeframe);
+            }
+
+            const url = `https://c.givsly.com/public/offer_status?${currentParams.toString()}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                document.querySelector('.offer-name').innerText = data.Name;
+                document.getElementById('scans').innerText = data.Impressions;
+                document.getElementById('responses').innerText = data.Responses;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Initial data fetch
+        fetchData();
+
+        // Refresh data every 1 minute
+        setInterval(() => {
+            fetchData();
+        }, 60000);
+
+        // Update URL and data based on timeframe selection
+        document.querySelectorAll('.timeframe-selector button').forEach(button => {
+            button.addEventListener('click', function() {
+                const timeframe = this.getAttribute('data-timeframe');
+                fetchData(timeframe);
+            });
+        });
+    </script>
+</body>
+</html>
