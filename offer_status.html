@@ -16,7 +16,6 @@
         /* Body and container */
         body, .container {
             background-color: #ffffff;
-            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -29,8 +28,13 @@
             justify-content: space-between;
         }
 
+        h1 {
+          padding: 20px 
+        }
+
         .container {
-            width: 100%;
+          width: 100%;
+    
             align-items: center;
             flex: 1;
         }
@@ -55,7 +59,6 @@
             flex: 3;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             width: 100%;
         }
@@ -98,7 +101,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="offer-name"></h1>
+        <h1 class="offer-name">Loading...</h1>
         <div class="error-message"></div>
         <div class="statistics">
             <div class="statistic">
