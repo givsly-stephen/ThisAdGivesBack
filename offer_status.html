@@ -13,32 +13,58 @@
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         }
 
-        /* Container */
-        .container {
-            padding: 20px;
-            background-color: #f9f9f9;
+        /* Body and container */
+        body, .container {
+            background-color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         /* Header */
         .offer-name {
+            flex: 1;
             text-align: center;
             font-weight: bold;
             font-size: 24px;
-            margin-bottom: 20px;
         }
 
         /* Error message */
         .error-message {
+            flex: 1;
             text-align: center;
             color: red;
-            margin-bottom: 20px;
+        }
+
+        /* Statistics */
+        .statistics {
+            flex: 3;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .statistic {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .label {
+            font-size: 18px;
+            color: #777;
         }
 
         /* Timeframe selector */
         .timeframe-selector {
+            position: sticky;
+            bottom: 0;
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
+            background-color: #ffffff;
+            border-top: 1px solid #ccc;
+            width: 100%;
         }
 
         .timeframe-selector button {
@@ -46,33 +72,13 @@
             padding: 15px;
             font-size: 16px;
             color: #007aff;
-            background: #fff;
-            border: 1px solid #ccc;
+            background-color: #fff;
+            border: none;
         }
 
-        .timeframe-selector button:first-child {
-            border-radius: 12px 0 0 12px;
-        }
-
-        .timeframe-selector button:last-child {
-            border-radius: 0 12px 12px 0;
-        }
-
-        /* Stats */
-        .statistics {
-            text-align: center;
-        }
-
-        .statistic {
-            font-size: 48px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .label {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #777;
+        .timeframe-selector button.selected {
+            background-color: #007aff;
+            color: #fff;
         }
     </style>
 </head>
@@ -80,11 +86,6 @@
     <div class="container">
         <h1 class="offer-name"></h1>
         <div class="error-message"></div>
-        <div class="timeframe-selector">
-            <button data-timeframe="all">All</button>
-            <button data-timeframe="day">Today</button>
-            <button data-timeframe="hour">Past Hour</button>
-        </div>
         <div class="statistics">
             <div class="statistic">
                 <span class="label">SCANS</span>
@@ -95,7 +96,13 @@
                 <span id="responses">0</span>
             </div>
         </div>
+        <div class="timeframe-selector">
+            <button data-timeframe="all">All</button>
+            <button data-timeframe="day">Today</button>
+            <button data-timeframe="hour">Past Hour</button>
+        </div>
     </div>
+
     <script>
       let currentParams = new URLSearchParams(window.location.search);
 
