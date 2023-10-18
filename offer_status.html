@@ -39,7 +39,7 @@
             flex: 0;
         }
 
-        /* Timeframe selector */
+        /* Modified Timeframe selector */
         .timeframe-selector {
             position: sticky;
             bottom: 0;
@@ -47,8 +47,27 @@
             justify-content: center;
             background-color: #ffffff;
             border-top: 1px solid #ccc;
-            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            width: 80%;
+            margin: auto;
             flex: 0;
+        }
+
+        .timeframe-selector button {
+            flex: 1;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: none;
+            border: none;
+            color: #007aff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .timeframe-selector button.selected {
+            background-color: #007aff;
+            color: #ffffff;
         }
 
         /* Stats */
@@ -73,25 +92,25 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="offer-name"></h1>
-        <div class="error-message"></div>
-        <div class="statistics">
-            <div class="statistic">
-                <span class="label">SCANS</span>
-                <span id="impressions">0</span>
-            </div>
-            <div class="statistic">
-                <span class="label">RESPONSES</span>
-                <span id="responses">0</span>
-            </div>
+  <div class="container">
+    <h1 class="offer-name"></h1>
+    <div class="error-message"></div>
+    <div class="statistics">
+        <div class="statistic">
+            <span class="label">SCANS</span>
+            <span id="impressions">0</span>
         </div>
-        <div class="timeframe-selector">
-            <button data-timeframe="all">All</button>
-            <button data-timeframe="day">Today</button>
-            <button data-timeframe="hour">Past Hour</button>
+        <div class="statistic">
+            <span class="label">RESPONSES</span>
+            <span id="responses">0</span>
         </div>
     </div>
+    <div class="timeframe-selector">
+        <button data-timeframe="all" class="selected">All</button>
+        <button data-timeframe="day">Today</button>
+        <button data-timeframe="hour">Past Hour</button>
+    </div>
+  </div>
 
     
 
