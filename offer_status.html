@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-
     <title>Offer Status</title>
     <style>
         /* Reset */
@@ -22,7 +19,8 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
         }
 
         /* Header */
@@ -30,14 +28,15 @@
             text-align: center;
             font-weight: bold;
             font-size: 24px;
-            margin-bottom: 20px;
+            margin-top: 20px;
+            flex: 0;
         }
 
         /* Error message */
         .error-message {
             text-align: center;
             color: red;
-            margin-bottom: 20px;
+            flex: 0;
         }
 
         /* Timeframe selector */
@@ -48,37 +47,27 @@
             justify-content: center;
             background-color: #ffffff;
             border-top: 1px solid #ccc;
-        }
-
-        .timeframe-selector button {
-            flex: 1;
-            padding: 15px;
-            font-size: 16px;
-            color: #007aff;
-            background: #fff;
-            border: 1px solid #ccc;
-            cursor: pointer;
-        }
-
-        .timeframe-selector button.selected {
-            background-color: #007aff;
-            color: #fff;
+            width: 100%;
+            flex: 0;
         }
 
         /* Stats */
         .statistics {
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            width: 100%;
         }
 
         .statistic {
             font-size: 48px;
             font-weight: bold;
-            margin-bottom: 20px;
         }
 
         .label {
             font-size: 18px;
-            margin-bottom: 10px;
             color: #777;
         }
     </style>
@@ -108,15 +97,7 @@
 
     <script>
 
-      window.addEventListener("orientationchange", function() {
-        if (window.orientation !== 0) {
-          // Landscape mode: rotate the body by -90 degrees
-          document.body.style.transform = 'rotate(-90deg)';
-        } else {
-          // Portrait mode: reset the body rotation
-          document.body.style.transform = 'rotate(0deg)';
-        }
-      }, false);
+
 
       // Initialize variables to hold button elements
       const buttons = document.querySelectorAll('.timeframe-selector button');
