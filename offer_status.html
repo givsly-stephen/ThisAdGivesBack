@@ -6,64 +6,101 @@
     <meta http-equiv="refresh" content="60">
     <title>Offer Status</title>
     <style>
-      body, html {
-          margin: 0;
-          padding: 0;
-          font-family: Arial, sans-serif;
-          height: 100%;
-      }
-      .container {
-          text-align: center;
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-      }
-      .offer-name {
-          font-size: 2em;
-          font-weight: bold;
-      }
-      .timeframe-selector button {
-          margin: 0.5em;
-          padding: 0.5em 1em;
-          font-size: 1em;
-      }
-      .statistics {
-          font-size: 1.5em;
-      }
-      .label {
-          display: block;
-          font-size: 0.7em;
-      }
-      .value {
-          font-size: 1.2em;
-      }
-  </style>
+        /* Reset some default browser styles */
+        body, h1, div, span, button {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Make a background color */
+        body {
+            background-color: #f1f1f1;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Center container */
+        .container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style headings */
+        .offer-name {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            text-align: center;
+            color: red;
+            margin-bottom: 10px;
+        }
+
+        /* Style buttons */
+        .timeframe-selector button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .timeframe-selector button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Style statistics */
+        .statistics {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .statistic {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .label {
+            display: block;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .value {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-      <h1 class="offer-name"></h1>
-      <div class="error-message" style="color: red;"></div>
-      
-      <div class="timeframe-selector">
-          <button data-timeframe="all">All</button>
-          <button data-timeframe="day">Today</button>
-          <button data-timeframe="hour">Past Hour</button>
-      </div>
-      
-      <div class="statistics">
-          <div class="statistic">
-              <span class="label">SCANS</span>
-              <span class="value" id="impressions">0</span>
-          </div>
-          <div class="statistic">
-              <span class="label">RESPONSES</span>
-              <span class="value" id="responses">0</span>
-          </div>
-      </div>
-  </div>
+    <div class="container">
+        <h1 class="offer-name"></h1>
+        <div class="error-message"></div>
+        
+        <div class="timeframe-selector">
+            <button data-timeframe="all">All</button>
+            <button data-timeframe="day">Today</button>
+            <button data-timeframe="hour">Past Hour</button>
+        </div>
+        
+        <div class="statistics">
+            <div class="statistic">
+                <span class="label">SCANS</span>
+                <span class="value" id="impressions">0</span>
+            </div>
+            <div class="statistic">
+                <span class="label">RESPONSES</span>
+                <span class="value" id="responses">0</span>
+            </div>
+        </div>
+    </div>
 
-  <script>
+    <script>
       let currentParams = new URLSearchParams(window.location.search);
 
       // Function to fetch data and update the page
@@ -112,5 +149,7 @@
           });
       });
   </script>
+
+
 </body>
 </html>
