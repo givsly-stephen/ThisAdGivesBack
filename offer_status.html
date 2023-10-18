@@ -3,144 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  
     <title>Offer Status</title>
     <style>
         /* Reset some default browser styles */
-        body, h1, p, button {
+        body, h1, div, span, button {
             margin: 0;
             padding: 0;
         }
 
-        /* Make a sticky footer */
-        body, html {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* All other styles */
+        /* Make a background color */
         body {
+            background-color: #f1f1f1;
             font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            align-items: center;
-            justify-content: center;
         }
 
-        h1 {
-            font-size: 1.5em;
+        /* Center container */
+        .container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style headings */
+        .offer-name {
+            font-size: 24px;
+            font-weight: bold;
             text-align: center;
-            margin-top: 1em;
+            margin-bottom: 20px;
         }
 
-        .statistics {
-            font-size: 2em;
+        .error-message {
             text-align: center;
+            color: red;
+            margin-bottom: 10px;
         }
 
-        .timeframe-selector {
-            flex: 0;
-            background-color: white;
-            position: sticky;
-            bottom: 0;
-            display: flex;
-            justify-content: space-around;
-            border-top: 1px solid #ccc;
-        }
-
+        /* Style buttons */
         .timeframe-selector button {
-            padding: 1em;
-            flex: 1;
-            border: none;
-            background-color: white;
-            color: #007bff;
-        }
-
-        .timeframe-selector button.selected {
             background-color: #007bff;
             color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .timeframe-selector button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Style statistics */
+        .statistics {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .statistic {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .label {
+            display: block;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .value {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div>
-        <h1 id="offerName"></h1>
-        <p class="statistics" id="impressions"></p>
-        <p class="statistics" id="responses"></p>
-    </div>
-
-    <div class="timeframe-selector">
-        <button data-timeframe="all" class="selected">All</button>
-        <button data-timeframe="day">Today</button>
-        <button data-timeframe="hour">Past Hour</button>
+    <div class="container">
+        <h1 class="offer-name"></h1>
+        <div class="error-message"></div>
+        
+        <div class="timeframe-selector">
+            <button data-timeframe="all">All</button>
+            <button data-timeframe="day">Today</button>
+            <button data-timeframe="hour">Past Hour</button>
+        </div>
+        
+        <div class="statistics">
+            <div class="statistic">
+                <span class="label">SCANS</span>
+                <span class="value" id="impressions">0</span>
+            </div>
+            <div class="statistic">
+                <span class="label">RESPONSES</span>
+                <span class="value" id="responses">0</span>
+            </div>
+        </div>
     </div>
 
     <script>
-      // Initialize variables to hold button elements
-      const buttons = document.querySelectorAll('.timeframe-selector button');
-      let selectedTimeframe = localStorage.getItem('selectedTimeframe') || 'all';
-  
-      // Function to update selected pill
-      const updateSelectedPill = (timeframe) => {
-          buttons.forEach(btn => {
-              btn.classList.remove('selected');
-              if (btn.getAttribute('data-timeframe') === timeframe) {
-                  btn.classList.add('selected');
-              }
-          });
-      };
-  
-      // Initialize selected pill
-      updateSelectedPill(selectedTimeframe);
-  
       let currentParams = new URLSearchParams(window.location.search);
-  
+
       // Function to fetch data and update the page
       async function fetchData(timeframe) {
           if (timeframe) {
               currentParams.set('timeframe', timeframe);
           }
-  
+
           const url = `https://c.givsly.com/public/offer_status?${currentParams.toString()}`;
           
           try {
               const response = await fetch(url);
               const data = await response.json();
               
-              if (data.ERROR) {  // Changed 'error' to 'ERROR'
+              if (data.error) {
+                  // Handle error condition
                   document.querySelector('.error-message').innerText = data.message;
               } else {
+                  // Clear any previous error message
                   document.querySelector('.error-message').innerText = '';
+                  
+                  // Update the display
                   document.querySelector('.offer-name').innerText = data.name;
                   document.getElementById('impressions').innerText = data.impressions;
                   document.getElementById('responses').innerText = data.responses;
               }
           } catch (error) {
+              // Handle fetch or network errors
               console.error('Error fetching data:', error);
           }
       }
-  
+
       // Initial data fetch
-      fetchData(selectedTimeframe);  // Pass the initial selectedTimeframe
-  
+      fetchData();
+
       // Refresh data every 1 minute
       setInterval(() => {
-          fetchData(selectedTimeframe);  // Pass the current selectedTimeframe
+          fetchData();
       }, 60000);
-  
+
       // Update URL and data based on timeframe selection
-      buttons.forEach(button => {
+      document.querySelectorAll('.timeframe-selector button').forEach(button => {
           button.addEventListener('click', function() {
               const timeframe = this.getAttribute('data-timeframe');
-              selectedTimeframe = timeframe;
-              localStorage.setItem('selectedTimeframe', selectedTimeframe);
-              updateSelectedPill(selectedTimeframe);
               fetchData(timeframe);
           });
       });
   </script>
-  
 </body>
 </html>
