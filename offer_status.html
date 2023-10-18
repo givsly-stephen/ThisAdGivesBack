@@ -78,52 +78,69 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let selectedTimeframe = localStorage.getItem('selectedTimeframe') || 'all';
-            const offerNameElement = document.getElementById("offerName");
-            const impressionsElement = document.getElementById("impressions");
-            const responsesElement = document.getElementById("responses");
-            const buttons = document.querySelectorAll('.timeframe-selector button');
-
-            const updateSelectedPill = (timeframe) => {
-                buttons.forEach(button => button.classList.remove('selected'));
-                document.querySelector(`[data-timeframe=${timeframe}]`).classList.add('selected');
-            };
-
-            const fetchData = async () => {
-                const url = new URL('https://c.givsly.com/public/offer_status');
-                if (selectedTimeframe !== 'all') {
-                    url.searchParams.append('timeframe', selectedTimeframe);
-                }
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.error) {
-                    offerNameElement.textContent = `Error: ${data.message}`;
-                    impressionsElement.textContent = '';
-                    responsesElement.textContent = '';
-                } else {
-                    offerNameElement.textContent = data.name;
-                    impressionsElement.textContent = `Impressions: ${data.impressions}`;
-                    responsesElement.textContent = `Responses: ${data.responses}`;
-                }
-            };
-
-            // Initialize
-            fetchData();
-            setInterval(fetchData, 60000);  // Refresh every 1 minute
-            updateSelectedPill(selectedTimeframe);
-
-            // Event listeners for buttons
-            buttons.forEach(button => {
-                button.addEventListener('click', event => {
-                    selectedTimeframe = event.currentTarget.dataset.timeframe;
-                    localStorage.setItem('selectedTimeframe', selectedTimeframe);
-                    updateSelectedPill(selectedTimeframe);
-                    fetchData();
-                });
-            });
-        });
-    </script>
+      // Initialize variables to hold button elements
+      const buttons = document.querySelectorAll('.timeframe-selector button');
+      let selectedTimeframe = localStorage.getItem('selectedTimeframe') || 'all';
+  
+      // Function to update selected pill
+      const updateSelectedPill = (timeframe) => {
+          buttons.forEach(btn => {
+              btn.classList.remove('selected');
+              if (btn.getAttribute('data-timeframe') === timeframe) {
+                  btn.classList.add('selected');
+              }
+          });
+      };
+  
+      // Initialize selected pill
+      updateSelectedPill(selectedTimeframe);
+  
+      let currentParams = new URLSearchParams(window.location.search);
+  
+      // Function to fetch data and update the page
+      async function fetchData(timeframe) {
+          if (timeframe) {
+              currentParams.set('timeframe', timeframe);
+          }
+  
+          const url = `https://c.givsly.com/public/offer_status?${currentParams.toString()}`;
+          
+          try {
+              const response = await fetch(url);
+              const data = await response.json();
+              
+              if (data.ERROR) {  // Changed 'error' to 'ERROR'
+                  document.querySelector('.error-message').innerText = data.message;
+              } else {
+                  document.querySelector('.error-message').innerText = '';
+                  document.querySelector('.offer-name').innerText = data.name;
+                  document.getElementById('impressions').innerText = data.impressions;
+                  document.getElementById('responses').innerText = data.responses;
+              }
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      }
+  
+      // Initial data fetch
+      fetchData(selectedTimeframe);  // Pass the initial selectedTimeframe
+  
+      // Refresh data every 1 minute
+      setInterval(() => {
+          fetchData(selectedTimeframe);  // Pass the current selectedTimeframe
+      }, 60000);
+  
+      // Update URL and data based on timeframe selection
+      buttons.forEach(button => {
+          button.addEventListener('click', function() {
+              const timeframe = this.getAttribute('data-timeframe');
+              selectedTimeframe = timeframe;
+              localStorage.setItem('selectedTimeframe', selectedTimeframe);
+              updateSelectedPill(selectedTimeframe);
+              fetchData(timeframe);
+          });
+      });
+  </script>
+  
 </body>
 </html>
