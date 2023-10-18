@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
     <title>Offer Status</title>
     <style>
         /* Reset */
@@ -104,6 +107,17 @@
     
 
     <script>
+
+      window.addEventListener("orientationchange", function() {
+        if (window.orientation !== 0) {
+          // Landscape mode: rotate the body by -90 degrees
+          document.body.style.transform = 'rotate(-90deg)';
+        } else {
+          // Portrait mode: reset the body rotation
+          document.body.style.transform = 'rotate(0deg)';
+        }
+      }, false);
+
       // Initialize variables to hold button elements
       const buttons = document.querySelectorAll('.timeframe-selector button');
       let selectedTimeframe = localStorage.getItem('selectedTimeframe') || 'all';
