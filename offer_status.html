@@ -13,10 +13,13 @@
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         }
 
-        /* Container */
-        .container {
-            padding: 20px;
-            background-color: #f9f9f9;
+        /* Body and container */
+        body, .container {
+            background-color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         /* Header */
@@ -36,9 +39,12 @@
 
         /* Timeframe selector */
         .timeframe-selector {
+            position: sticky;
+            bottom: 0;
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
+            background-color: #ffffff;
+            border-top: 1px solid #ccc;
         }
 
         .timeframe-selector button {
@@ -48,14 +54,12 @@
             color: #007aff;
             background: #fff;
             border: 1px solid #ccc;
+            cursor: pointer;
         }
 
-        .timeframe-selector button:first-child {
-            border-radius: 12px 0 0 12px;
-        }
-
-        .timeframe-selector button:last-child {
-            border-radius: 0 12px 12px 0;
+        .timeframe-selector button.selected {
+            background-color: #007aff;
+            color: #fff;
         }
 
         /* Stats */
@@ -80,11 +84,6 @@
     <div class="container">
         <h1 class="offer-name"></h1>
         <div class="error-message"></div>
-        <div class="timeframe-selector">
-            <button data-timeframe="all">All</button>
-            <button data-timeframe="day">Today</button>
-            <button data-timeframe="hour">Past Hour</button>
-        </div>
         <div class="statistics">
             <div class="statistic">
                 <span class="label">SCANS</span>
@@ -95,59 +94,79 @@
                 <span id="responses">0</span>
             </div>
         </div>
+        <div class="timeframe-selector">
+            <button data-timeframe="all">All</button>
+            <button data-timeframe="day">Today</button>
+            <button data-timeframe="hour">Past Hour</button>
+        </div>
     </div>
+
     
 
     <script>
+      // Initialize variables to hold button elements
+      const buttons = document.querySelectorAll('.timeframe-selector button');
+      let selectedTimeframe = localStorage.getItem('selectedTimeframe') || 'all';
+  
+      // Function to update selected pill
+      const updateSelectedPill = (timeframe) => {
+          buttons.forEach(btn => {
+              btn.classList.remove('selected');
+              if (btn.getAttribute('data-timeframe') === timeframe) {
+                  btn.classList.add('selected');
+              }
+          });
+      };
+  
+      // Initialize selected pill
+      updateSelectedPill(selectedTimeframe);
+  
       let currentParams = new URLSearchParams(window.location.search);
-
+  
       // Function to fetch data and update the page
       async function fetchData(timeframe) {
           if (timeframe) {
               currentParams.set('timeframe', timeframe);
           }
-
+  
           const url = `https://c.givsly.com/public/offer_status?${currentParams.toString()}`;
           
           try {
               const response = await fetch(url);
               const data = await response.json();
               
-              if (data.error) {
-                  // Handle error condition
+              if (data.ERROR) {  // Changed 'error' to 'ERROR'
                   document.querySelector('.error-message').innerText = data.message;
               } else {
-                  // Clear any previous error message
                   document.querySelector('.error-message').innerText = '';
-                  
-                  // Update the display
                   document.querySelector('.offer-name').innerText = data.name;
                   document.getElementById('impressions').innerText = data.impressions;
                   document.getElementById('responses').innerText = data.responses;
               }
           } catch (error) {
-              // Handle fetch or network errors
               console.error('Error fetching data:', error);
           }
       }
-
+  
       // Initial data fetch
-      fetchData();
-
+      fetchData(selectedTimeframe);  // Pass the initial selectedTimeframe
+  
       // Refresh data every 1 minute
       setInterval(() => {
-          fetchData();
+          fetchData(selectedTimeframe);  // Pass the current selectedTimeframe
       }, 60000);
-
+  
       // Update URL and data based on timeframe selection
-      document.querySelectorAll('.timeframe-selector button').forEach(button => {
+      buttons.forEach(button => {
           button.addEventListener('click', function() {
               const timeframe = this.getAttribute('data-timeframe');
+              selectedTimeframe = timeframe;
+              localStorage.setItem('selectedTimeframe', selectedTimeframe);
+              updateSelectedPill(selectedTimeframe);
               fetchData(timeframe);
           });
       });
   </script>
-
 
 </body>
 </html>
