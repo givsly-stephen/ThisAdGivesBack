@@ -112,6 +112,10 @@
                 <span class="label">RESPONSES</span>
                 <span id="responses">0</span>
             </div>
+            <div class="statistic">
+                <span class="label">TIMEZONE</span>
+                <span id="timezone">UTC</span>
+            </div>
         </div>
         <div class="timeframe-selector">
             <button data-timeframe="all">All</button>
@@ -146,6 +150,7 @@
                   document.querySelector('.offer-name').innerText = data.name;
                   document.getElementById('impressions').innerText = data.impressions;
                   document.getElementById('responses').innerText = data.responses;
+                  document.getElementById('timezone').innerText = data.timezone;
               }
           } catch (error) {
               // Handle fetch or network errors
