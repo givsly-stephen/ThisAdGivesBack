@@ -2,97 +2,382 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Impact Ad demo</title>
     <style>
-      .ad {
-        position: relative;
-        background-color: #dadada;
-        display: flex;
+      body {
+        margin: 20px;
+        font: 16px/1.5 Helvetica, Arial, sans-serif;
       }
 
-      body {
+      section {
+        margin: 20px auto;
+      }
+
+      section:not(:last-of-type) {
+        border-bottom: 1px solid #dadada;
+      }
+
+      .ad {
+        position: relative;
+      }
+
+      .ad .placeholder {
+        background-color: #ccc;
+        width: 100%;
+        height: 100%;
+      }
+
+      code {
+        background: #dadada;
+        color: #333;
+        padding: 2px 6px;
+        border-radius: 2px;
+        font-size: 14px;
+      }
+
+      label {
         display: flex;
+        flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
-        margin: 16px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-top: 12px;
+      }
+
+      textarea {
+        border: 1px solid #dadada;
+        resize: none;
+        width: 600px;
+        margin: 0;
+        margin-bottom: 20px;
       }
     </style>
   </head>
+
   <body>
-    <givsly-good-ad
-      trigger="good-ad-hrz-dark"
-      trigger-pos="top-right"
-      ad-size="300x250"
-      config-uri="https://givsly-stephen.github.io/ThisAdGivesBack/UNDR/loreal-pre-jgeEp2n9hYj-1.json"
-      ad-selector="#test-parent"
-    ></givsly-good-ad>
-
-    <div class="info">
-      <div class="ad" >
-        <img src="bg.jpg" alt="Dunkin ad!" width="320" style="object-fit: cover;" />
-        <givsly-good-ad
-          trigger="tagb-vrt-dark"
-          trigger-pos="top-left"
-          ad-size="full-screen"
-          config-uri="https://givsly-stephen.github.io/ThisAdGivesBack/UNDR/loreal-pre-jgeEp2n9hYj-1.json"
-        ></givsly-good-ad>
-      </div>
-      <h3>3 NPO configuration</h3>
-    </div>
-    <div class="info">
-      <div class="ad">
-        <img src="bg.jpg" alt="Dunkin ad!" width="300" />
-        <givsly-good-ad
-          trigger="tagb-vrt-light"
+    <h1>Impact Ad sizes</h1>
+    <section>
+      <div class="ad" style="width: 300px; height: 50px">
+        <div class="placeholder"></div>
+        <givsly-impact-ad
+          trigger-style="hrz-light"
           trigger-pos="bottom-left"
-          ad-size="auto"
-          config-uri="https://givsly-stephen.github.io/ThisAdGivesBack/INBI/jgdNQPsWKJr-1.json"
-        ></givsly-good-ad>
+          ad-size="300x50"
+          config-uri="./demo.json"
+          trigger-scale="1"
+        ></givsly-impact-ad>
       </div>
-      <h3>1 NPO configuration</h3>
-    </div>
-    <div class="info">
-      <iframe
-        src="ad.html"
-        width="300"
-        style="border: none"
-        height="496"
-        scrolling="no"
-      ></iframe>
-      <h3>This is rendered into iframe</h3>
-    </div>
-    
-    <script src="good_ads.min.js" type="module"></script>
+      <p>Mobile leaderboard <code>300 x 50</code></p>
+    </section>
+    <section>
+      <div class="ad" style="width: 320px; height: 50px">
+        <div class="placeholder"></div>
+        <givsly-impact-ad
+          trigger-style="hrz-light"
+          trigger-pos="bottom-left"
+          ad-size="320x50"
+          config-uri="./demo.json"
+          trigger-scale="1"
+        ></givsly-impact-ad>
+      </div>
+      <p>Mobile leaderboard <code>320 x 50</code></p>
+    </section>
+    <section>
+      <div class="ad" style="width: 468px; height: 60px">
+        <div class="placeholder"></div>
+        <givsly-impact-ad
+        trigger-style="hrz-light"
+          trigger-pos="bottom-left"
+          ad-size="468x60"
+          config-uri="./demo.json"
+          trigger-scale="1"
+        ></givsly-impact-ad>
+      </div>
+      <p>Mobile leaderboard <code>468 x 60</code></p>
+    </section>
+    <section>
+      <div class="ad">
+        <div class="placeholder" style="width: 728px; height: 90px"></div>
+        <givsly-impact-ad
+        trigger-style="hrz-light"
+          trigger-pos="bottom-left"
+          ad-size="728x90"
+          config-uri="./demo.json"
+          trigger-scale="1"
+        ></givsly-impact-ad>
+      </div>
+      <p>Leaderboard <code>728 x 90</code></p>
+    </section>
+    <section>
+      <div class="ad" style="width: 160px; height: 600px">
+        <div class="placeholder"></div>
+        <givsly-impact-ad
+        trigger-style="hrz-light"
+          trigger-pos="bottom-left"
+          ad-size="160x600"
+          config-uri="./demo.json"
+          trigger-scale="1"
+        ></givsly-impact-ad>
+      </div>
+      <p>Skyscraper <code>160 x 600</code></p>
+    </section>
+    <section>
+      <div class="ad" style="width: 300px; height: 250px">
+        <div class="placeholder"></div>
+        <givsly-impact-ad
+        trigger-style="hrz-light"
+          trigger-pos="bottom-left"
+          ad-size="300x250"
+          config-uri="./demo.json"
+          trigger-scale="1"
+        ></givsly-impact-ad>
+      </div>
+      <p>Rectangle <code>300 x 250</code></p>
+    </section>
+    <section>
+      <div class="ad" style="width: 480px; height: 320px">
+        <div class="placeholder"></div>
+        <givsly-impact-ad
+        trigger-style="hrz-light"
+          trigger-pos="bottom-left"
+          ad-size="480x320"
+          config-uri="./demo.json"
+          trigger-scale="1"
+        ></givsly-impact-ad>
+      </div>
+      <p>Rectangle <code>480 x 320</code></p>
+    </section>
+    <section>
+      <div class="ad" style="width: 320px; height: 480px">
+        <div class="placeholder"></div>
+        <givsly-impact-ad
+        trigger-style="hrz-light"
+          trigger-pos="bottom-left"
+          ad-size="fullscreen"
+          config-uri="./demo.json"
+          trigger-scale="1"
+        ></givsly-impact-ad>
+      </div>
+      <p>Rectangle <code>fullscreen (320 x 480)</code></p>
+      <p>
+        Our fullscreen setup occupies given space with overlay and fits the impact-ad
+        to the center of the area.
+      </p>
+    </section>
+    <section>
+      <div class="ad" style="width: 1200px; height: 627px">
+        <div class="placeholder"></div>
+        <givsly-impact-ad
+        trigger-style="hrz-light"
+          trigger-pos="bottom-left"
+          ad-size="fullscreen"
+          config-uri="./demo.json"
+          trigger-scale="1"
+        ></givsly-impact-ad>
+      </div>
+      <p>Native <code>fullscreen (1200 x 627)</code></p>
+    </section>
+
+    <section id="properties">
+      <h2>Dynamic properties</h2>
+      <p><code>givsly-impact-ad</code> is highly customizeable and reacts to changes dynamatically</p>
+      <div>
+        <ul>
+          <li>
+            <code>trigger-pos</code>
+            <select
+              property="trigger-pos"
+              onchange="updateAdProperty(event)"
+            >
+              <option value="bottom-left" selected>bottom-left</option>
+              <option value="bottom-right">bottom-right</option>
+              <option value="top-left">top-left</option>
+              <option value="top-right">top-right</option>
+            </select>
+
+            <i>Position of the impact ad icon</i>
+          </li>
+
+          <li>
+            <code>ad-size</code>
+            <select property="ad-size" onchange="updateAdProperty(event)">
+              <option value="300x50">300x50</option>
+              <option value="320x50">320x50</option>
+              <option value="468x60">468x60</option>
+              <option value="728x90">728x90</option>
+              <option value="160x600">160x600</option>
+              <option value="300x250" selected>300x250</option>
+              <option value="480x320">480x320</option>
+              <option value="full-screen">full-screen</option>
+              <option value="auto">auto</option>
+            </select>
+            <i>Size of the ad, fixed size or responsive</i>
+          </li>
+
+          <li>
+            <code>trigger-style</code>
+            <select property="trigger-style" onchange="updateAdProperty(event)">
+              <option selected value="hrz-light">
+                hrz-light
+              </option>
+              <option value="hrz-dark">hrz-dark</option>
+              <option value="vrt-light">vrt-light</option>
+              <option value="vrt-dark">vrt-dark</option>
+            </select>
+            <i>icon variant</i>
+          </li>
+
+          <li>
+            <code>trigger-scale</code>
+            <select property="trigger-scale" onchange="updateAdProperty(event)">
+              <option value="0.5">0.5</option>
+              <option value="0.75">0.75</option>
+              <option value="1" selected>1</option>
+              <option value="1.5">1.5</option>
+              <option value="2">2</option>
+            </select>
+            <i>Scale of the impact ad icon</i>
+          </li>
+
+          <li>
+            <code>auto-close-timeout</code>
+            <select property="auto-close-timeout" onchange="updateAdProperty(event)">
+              <option value="3000">3 seconds</option>
+              <option value="5000">5 seconds</option>
+              <option value="7000">7 seconds</option>
+              <option value="10000" selected>10 seconds</option>
+            </select>
+            <i>Time to wait until thankyou -page is closed after shown</i>
+          </li>
+        </ul>
+        <div class="ad" style="width: 300px; height: 250px">
+          <div class="placeholder"></div>
+          <givsly-impact-ad
+          trigger-style="hrz-light"
+            trigger-pos="bottom-left"
+            ad-size="300x250"
+            config-uri="./demo.json"
+            trigger-scale="1"
+          ></givsly-impact-ad>
+        </div>
+      </div>
+      <br />
+    </section>
+
+    <section>
+      <h2>Event API</h2>
+      <p>
+        <code>givsly-impact-ad</code> -element dispatches three differrent
+        javascript events to global window object referencing element instance
+        it originated from:
+      </p>
+      <ul>
+        <li><code>givsly-npo-chosen</code></li>
+        <li><code>givsly-expanded</code></li>
+        <li><code>givsly-closed</code></li>
+      </ul>
+      <div class="ad" style="width: 300px; height: 250px">
+        <div class="placeholder"></div>
+        <givsly-impact-ad
+          trigger-style="hrz-light"
+          trigger-pos="bottom-left"
+          ad-size="300x250"
+          config-uri="./demo.json"
+          trigger-scale="1"
+          id="interactive-demo"
+        ></givsly-impact-ad>
+      </div>
+      <label>Event log <textarea readonly rows="6"></textarea></label>
+    </section>
+
     <script>
-      function generateLazyAd(id) {
-        const info = document.createElement("div");
-        info.classList.add("info");
-        const parent = document.createElement("div");
-        parent.classList.add("ad");
-        if (id) {
-          parent.id = id;
+      function updateAdContainer(container, value) {
+
+        let sizeValue = value;
+
+        if(value === "full-screen") {
+          sizeValue = "1200x627"
         }
-        const img = document.createElement("img");
-        img.width = 300;
-        img.src = "bg.jpg";
 
-        const title = document.createElement("h3");
-        title.innerText = "This is added with 100ms delay";
+        if (value === "auto") {
+          sizeValue = "320x480"
+        }
 
-        parent.appendChild(img);
-        info.appendChild(parent);
-        info.appendChild(title);
-        setTimeout(() => {
-          document.body.appendChild(info);
-        }, 1000);
+        if (container instanceof HTMLElement) {
+          const [width, height] = sizeValue.split("x");
+          container.style.width = width.concat("px");
+          container.style.height = height.concat("px");
+        }
       }
-      generateLazyAd("test-parent");
-      window.addEventListener("givsly-good-ad-expanded", console.log);
-      window.addEventListener("givsly-good-ad-npo-chosen", console.log);
-      window.addEventListener("givsly-good-ad-closed", console.log);
+      function updateAdProperty(event) {
+        const { target } = event;
+
+        const { value } = target;
+        const property = target.getAttribute("property");
+        const section = target.closest("section");
+
+        // side effects
+        switch (property) {
+          case "ad-size":
+            const adContainer = section.querySelector(".ad");
+            updateAdContainer(adContainer, value);
+            break;
+        }
+
+        const ad = section.querySelector("givsly-impact-ad");
+
+        if (ad instanceof HTMLElement && property && value) {
+          ad.setAttribute(property, value);
+        }
+      }
+
+      const propertySection = document.getElementById("properties");
+
+      const givslyAd = propertySection.querySelector("givsly-impact-ad");
+      const propertyOptions = propertySection.querySelectorAll("select");
+      propertyOptions.forEach(option => {
+        const { value } = option;
+        const property = option.getAttribute("property");
+
+        switch (property) {
+          case "ad-size":
+            const adContainer = propertySection.querySelector(".ad");
+            updateAdContainer(adContainer, value);
+            break;
+        }
+
+        console.log(property,value)
+        givslyAd.setAttribute(property, value);
+      })
+
+    </script>
+
+    <script src="https://cdn.givsly.com/ga/impact_ads.min.js" type="module"></script>
+    <script>
+      function writeToLogOutput(event) {
+        const { detail, type } = event;
+
+        if (detail.elementRef !== document.getElementById("interactive-demo")) {
+          return;
+        }
+
+        const logOutput = detail.elementRef
+          .closest("section")
+          .querySelector("textarea");
+
+        let line = `[Event] ${type}\n`;
+
+        if (type === "givsly-npo-chosen") {
+          line = `[Event] ${type}(${detail.npo})\n`;
+        }
+
+        logOutput.value = line + logOutput.value;
+      }
+
+      window.addEventListener("givsly-expanded", writeToLogOutput);
+      window.addEventListener("givsly-npo-chosen", writeToLogOutput);
+      window.addEventListener("givsly-closed", writeToLogOutput);
     </script>
   </body>
 </html>
-
