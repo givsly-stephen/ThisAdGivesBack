@@ -44,13 +44,13 @@
         });
 
         // Parse the CSV and adjust the view
-        Papa.parse("data.csv", {
+        Papa.parse("counts.csv", {
             download: true,
             header: true,
             complete: function(results) {
                 results.data.forEach(function(row) {
-                    if (row["Home Zip/Postal"] && row["Home Zip/Postal"].length === 5 && /^\d+$/.test(row["Home Zip/Postal"])) {
-                        map.setFilter('zip-boundaries', ['==', ['get', 'ZIP'], row["Home Zip/Postal"]]);
+                    if (row["zip"] && row["zip"].length === 5 && /^\d+$/.test(row["zip"])) {
+                        map.setFilter('zip-boundaries', ['==', ['get', 'ZIP'], row["zip"]]);
                     }
                 });
             }
