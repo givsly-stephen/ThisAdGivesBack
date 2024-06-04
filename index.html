@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zip Code Area Visualization</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2l2c2x5IiwiYSI6ImNsdGRpNmFzNDAybWkyd3JuNnRreTZoNDEifQ.Ls8coxMMl0dr0vqxNE8B-Q';
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        zoom: 3,
+        center: [-95.7129, 37.0902] // Centered on the US
+    });
+
+    map.on('load', function() {
+        // Load the vector tile source for zip codes
+        map.addSource('zipcodes', {
+            type: 'vector',
+            tiles: ["https://gis.data.census.gov/arcgis/rest/services/Hosted/VT_2019_860_00_PY_D1/VectorTileServer/tile/{z}/{y}/{x}.pbf"],
+            tileSize: 512
+        });
+
+        // Add a layer to visualize ZIP code boundaries
+        map.addLayer({
+            id: 'zip-boundaries',
+            type: 'fill',
+            source: 'zipcodes',
+            'source-layer': 'VT_2019_860', 
+            paint: {
+                'fill-color': '#088',
+                'fill-opacity': 0.5
+            }
+        });
+
+        // Parse the CSV and adjust the view
+        Papa.parse("data.csv", {
+            download: true,
+            header: true,
+            complete: function(results) {
+                results.data.forEach(function(row) {
+                    if (row["Home Zip/Postal"] && row["Home Zip/Postal"].length === 5 && /^\d+$/.test(row["Home Zip/Postal"])) {
+                        map.setFilter('zip-boundaries', ['==', ['get', 'ZIP'], row["Home Zip/Postal"]]);
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
