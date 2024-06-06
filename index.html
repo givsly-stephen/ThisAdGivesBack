@@ -1,61 +1,287 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Zip Code Area Visualization</title>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <head>
+    <meta charset="utf-8" />
+    <title>Feeding America</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
     <style>
-        body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
     </style>
-</head>
-<body>
-<div id="map"></div>
-<script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2l2c2x5IiwiYSI6ImNsdGRpNmFzNDAybWkyd3JuNnRreTZoNDEifQ.Ls8coxMMl0dr0vqxNE8B-Q';
-
-    var map = new mapboxgl.Map({
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZ2l2c2x5IiwiYSI6ImNsdGRpNmFzNDAybWkyd3JuNnRreTZoNDEifQ.Ls8coxMMl0dr0vqxNE8B-Q';
+      const map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/light-v10',
-        zoom: 3,
-        center: [-95.7129, 37.0902] // Centered on the US
-    });
+        style: 'mapbox://styles/mapbox/dark-v11',
+        center: [-79.999732, 40.4374],
+        zoom: 11
+      });
 
-    map.on('load', function() {
-        // Load the vector tile source for zip codes
-        map.addSource('zipcodes', {
-            type: 'vector',
-            tiles: ["https://gis.data.census.gov/arcgis/rest/services/Hosted/VT_2019_050_00_PY_D1/VectorTileServer/tile/{z}/{y}/{x}.pbf"],
-            tileSize: 512
+      // load volunteers donations .geojson data source file
+      map.on('load', () => {
+
+        // load donations .geojson data source file
+        map.addSource('donations', {
+          'type': 'geojson',
+          'data': './donations.geojson'
         });
 
-        // Add a layer to visualize ZIP code boundaries
-        map.addLayer({
-            id: 'zip-boundaries',
-            type: 'fill',
-            source: 'zipcodes',
-            'source-layer': 'VT_2019_860', 
-            paint: {
-                'fill-color': '#088',
-                'fill-opacity': 0.5
+        // load donations .geojson data source file
+        map.addSource('volunteers', {
+          'type': 'geojson',
+          'data': './volunteers.geojson'
+        });
+
+        // donations heatmap layer
+        map.addLayer(
+          {
+            'id': 'donations-heat',
+            'type': 'heatmap',
+            'source': 'donations',
+            'maxzoom': 15,
+            'paint': {
+              // increase weight as diameter breast height increases
+              'heatmap-weight': {
+                'property': 'count',
+                'type': 'exponential',
+                'stops': [
+                  [1, 0],
+                  [20, 5] ////////////////
+                ]
+              },
+              // increase intensity as zoom level increases
+              'heatmap-intensity': {
+                'stops': [
+                  [11, 1],
+                  [15, 3]
+                ]
+              },
+              // use sequential color palette to use exponentially as the weight increases
+              'heatmap-color': [
+                'interpolate',
+                ['linear'],
+                ['heatmap-density'],
+                0,
+                'rgba(169, 223, 191, 0)',
+                0.2,
+                'rgb(125, 206, 160)',
+                0.4,
+                'rgb(82, 190, 128)',
+                0.6,
+                'rgb(39, 174, 96)',
+                0.8,
+                'rgb(34, 153, 84)',
+                1,
+                'rgb(30, 132, 73)'
+              ],
+              // increase radius as zoom increases
+              'heatmap-radius': {
+                'stops': [
+                  [11, 15],
+                  [15, 20]
+                ]
+              },
+              // decrease opacity to transition into the circle layer
+              'heatmap-opacity': {
+                'default': 1,
+                'stops': [
+                  [14, 1],
+                  [15, 0]
+                ]
+              }
             }
-        });
+          },
+          'waterway-label'
+        );
 
-        // Parse the CSV and adjust the view
-        Papa.parse("counts.csv", {
-            download: true,
-            header: true,
-            complete: function(results) {
-                results.data.forEach(function(row) {
-                    if (row["zip"] && row["zip"].length === 5 && /^\d+$/.test(row["zip"])) {
-                        map.setFilter('zip-boundaries', ['==', ['get', 'ZIP'], row["zip"]]);
-                    }
-                });
+        // volunteers donations heatmap layer
+        map.addLayer(
+          {
+            'id': 'volunteers-heat',
+            'type': 'heatmap',
+            'source': 'volunteers',
+            'maxzoom': 15,
+            'paint': {
+              // increase weight as diameter breast height increases
+              'heatmap-weight': {
+                'property': 'count',
+                'type': 'exponential',
+                'stops': [
+                  [1, 0],
+                  [20, 5] ////////////////////
+                ]
+              },
+              // increase intensity as zoom level increases
+              'heatmap-intensity': {
+                'stops': [
+                  [11, 1],
+                  [15, 3]
+                ]
+              },
+              // use sequential color palette to use exponentially as the weight increases
+              'heatmap-color': [
+                'interpolate',
+                ['linear'],
+                ['heatmap-density'],
+                0,
+                'rgba(245, 183, 177, 0)',
+                0.2,
+                'rgb(241, 148, 138)',
+                0.4,
+                'rgb(236, 112, 99)',
+                0.6,
+                'rgb(231, 76, 60)',
+                0.8,
+                'rgb(203, 67, 53)',
+                1,
+                'rgb(176, 58, 46)'
+              ],
+              // increase radius as zoom increases
+              'heatmap-radius': {
+                'stops': [
+                  [11, 15],
+                  [15, 20]
+                ]
+              },
+              // decrease opacity to transition into the circle layer
+              'heatmap-opacity': {
+                'default': 1,
+                'stops': [
+                  [14, 1],
+                  [15, 0]
+                ]
+              }
             }
-        });
-    });
-</script>
-</body>
+          },
+          'waterway-label'
+        );
+
+        // donations heatmap points layer
+        map.addLayer(
+          {
+            'id': 'donations-point',
+            'type': 'circle',
+            'source': 'donations',
+            'minzoom': 14,
+            'paint': {
+              // increase the radius of the circle as the zoom level and count value increases
+              'circle-radius': {
+                'property': 'count',
+                'type': 'exponential',
+                'stops': [
+                  [{ zoom: 15, value: 1 }, 20],
+                  [{ zoom: 15, value: 10 }, 40],
+                  [{ zoom: 22, value: 1 }, 40],
+                  [{ zoom: 22, value: 10 }, 80]
+                ]
+              },
+              'circle-color': {
+                'property': 'count',
+                'type': 'exponential',
+                'stops': [
+                  [0, 'rgb(217, 252, 210)'],
+                  [250, 'rgb(194, 247, 183)'],
+                  [500, 'rgb(138, 229, 120)'],
+                  [750, 'rgb(117, 218, 97)'],
+                  [1000, 'rgb(92, 205, 69)'],
+                  [1300, 'rgb(62, 192, 36)'],
+                  [1700, 'rgb(28, 142, 6)']
+                ]
+              },
+              'circle-stroke-color': 'green',
+              'circle-stroke-width': 1,
+              'circle-opacity': {
+                'stops': [
+                  [14, 0],
+                  [15, 1]
+                ]
+              }
+            }
+          },
+          'waterway-label'
+        );
+
+        // volunteers donations heatmap points layer
+        map.addLayer(
+          {
+            'id': 'volunteers-point',
+            'type': 'circle',
+            'source': 'volunteers',
+            'minzoom': 14,
+            'paint': {
+              // increase the radius of the circle as the zoom level and count value increases
+              'circle-radius': {
+                'property': 'count',
+                'type': 'exponential',
+                'stops': [
+                  [{ zoom: 15, value: 1 }, 20],
+                  [{ zoom: 15, value: 10 }, 40],
+                  [{ zoom: 22, value: 1 }, 40],
+                  [{ zoom: 22, value: 10 }, 80]
+                ]
+              },
+              'circle-color': {
+                'property': 'count',
+                'type': 'exponential',
+                'stops': [
+                  [0, 'rgb(250, 219, 216)'],
+                  [250, 'rgb(245, 183, 177)'],
+                  [500, 'rgb(241, 148, 138)'],
+                  [750, 'rgb(236, 112, 99)'],
+                  [1000, 'rgb(231, 76, 60)'],
+                  [1300, 'rgb(203, 67, 53)'],
+                  [1700, 'rgb(176, 58, 46)']
+                ]
+              },
+              'circle-stroke-color': 'red',
+              'circle-stroke-width': 1,
+              'circle-opacity': {
+                'stops': [
+                  [14, 0],
+                  [15, 1]
+                ]
+              }
+            }
+          },
+          'waterway-label'
+        );
+
+
+      });
+
+      // click on tree to view count in a popup
+      map.on('click', 'donations-point', (event) => {
+        new mapboxgl.Popup()
+          .setLngLat(event.features[0].geometry.coordinates)
+          .setHTML(`<strong>Donations:</strong> ${event.features[0].properties.count}`)
+          .addTo(map);
+      });
+
+      // click on tree to view count in a popup
+      map.on('click', 'volunteers-point', (event) => {
+        new mapboxgl.Popup()
+          .setLngLat(event.features[0].geometry.coordinates)
+          .setHTML(`<strong>Volunteers:</strong> ${event.features[0].properties.count}`)
+          .addTo(map);
+      });
+
+    </script>
+  </body>
 </html>
