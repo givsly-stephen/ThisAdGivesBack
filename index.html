@@ -34,252 +34,264 @@
         zoom: 11
       });
 
-      // load volunteers donations .geojson data source file
       map.on('load', () => {
-
-        // load donations .geojson data source file
         map.addSource('donations', {
           'type': 'geojson',
           'data': './donations.geojson'
         });
 
-        // load donations .geojson data source file
         map.addSource('volunteers', {
           'type': 'geojson',
           'data': './volunteers.geojson'
         });
 
-        // donations heatmap layer
-        map.addLayer(
-          {
-            'id': 'donations-heat',
-            'type': 'heatmap',
-            'source': 'donations',
-            'maxzoom': 15,
-            'paint': {
-              // increase weight as diameter breast height increases
-              'heatmap-weight': {
-                'property': 'count',
-                'type': 'exponential',
-                'stops': [
-                  [1, 0],
-                  [20, 5] ////////////////
-                ]
-              },
-              // increase intensity as zoom level increases
-              'heatmap-intensity': {
-                'stops': [
-                  [11, 1],
-                  [15, 3]
-                ]
-              },
-              // use sequential color palette to use exponentially as the weight increases
-              'heatmap-color': [
-                'interpolate',
-                ['linear'],
-                ['heatmap-density'],
-                0,
-                'rgba(169, 223, 191, 0)',
-                0.2,
-                'rgb(125, 206, 160)',
-                0.4,
-                'rgb(82, 190, 128)',
-                0.6,
-                'rgb(39, 174, 96)',
-                0.8,
-                'rgb(34, 153, 84)',
-                1,
-                'rgb(30, 132, 73)'
-              ],
-              // increase radius as zoom increases
-              'heatmap-radius': {
-                'stops': [
-                  [11, 15],
-                  [15, 20]
-                ]
-              },
-              // decrease opacity to transition into the circle layer
-              'heatmap-opacity': {
-                'default': 1,
-                'stops': [
-                  [14, 1],
-                  [15, 0]
-                ]
-              }
+        map.addLayer({
+          'id': 'donations-heat',
+          'type': 'heatmap',
+          'source': 'donations',
+          'maxzoom': 15,
+          'paint': {
+            'heatmap-weight': {
+              'property': 'count',
+              'type': 'exponential',
+              'stops': [
+                [0, 5],
+                [250, 10],
+                [500, 20],
+                [750, 30],
+                [1000, 40],
+                [1300, 50],
+                [1700, 60] 
+              ]
+            },
+            'heatmap-intensity': {
+              'stops': [
+                [11, 1],
+                [15, 3]
+              ]
+            },
+            'heatmap-color': [
+              'interpolate',
+              ['linear'],
+              ['heatmap-density'],
+              0,
+              'rgba(169, 223, 191, 0)',
+              0.2,
+              'rgb(125, 206, 160)',
+              0.4,
+              'rgb(82, 190, 128)',
+              0.6,
+              'rgb(39, 174, 96)',
+              0.8,
+              'rgb(34, 153, 84)',
+              1,
+              'rgb(30, 132, 73)'
+            ],
+            'heatmap-radius': {
+              'stops': [
+                [0, 5],
+                [5, 6],
+                [6, 7],
+                [7, 8],
+                [8, 9],
+                [9, 10],
+                [10, 11],
+                [11, 12],
+                [12, 13],
+                [13, 14],
+                [14, 15],
+                [15, 16]
+              ]
+            },
+            'heatmap-opacity': {
+              'default': 1,
+              'stops': [
+                [14, 1],
+                [15, 0]
+              ]
             }
-          },
-          'waterway-label'
-        );
+          }
+        }, 'waterway-label');
 
-        // volunteers donations heatmap layer
-        map.addLayer(
-          {
-            'id': 'volunteers-heat',
-            'type': 'heatmap',
-            'source': 'volunteers',
-            'maxzoom': 15,
-            'paint': {
-              // increase weight as diameter breast height increases
-              'heatmap-weight': {
-                'property': 'count',
-                'type': 'exponential',
-                'stops': [
-                  [1, 0],
-                  [20, 5] ////////////////////
-                ]
-              },
-              // increase intensity as zoom level increases
-              'heatmap-intensity': {
-                'stops': [
-                  [11, 1],
-                  [15, 3]
-                ]
-              },
-              // use sequential color palette to use exponentially as the weight increases
-              'heatmap-color': [
-                'interpolate',
-                ['linear'],
-                ['heatmap-density'],
-                0,
-                'rgba(245, 183, 177, 0)',
-                0.2,
-                'rgb(241, 148, 138)',
-                0.4,
-                'rgb(236, 112, 99)',
-                0.6,
-                'rgb(231, 76, 60)',
-                0.8,
-                'rgb(203, 67, 53)',
-                1,
-                'rgb(176, 58, 46)'
-              ],
-              // increase radius as zoom increases
-              'heatmap-radius': {
-                'stops': [
-                  [11, 15],
-                  [15, 20]
-                ]
-              },
-              // decrease opacity to transition into the circle layer
-              'heatmap-opacity': {
-                'default': 1,
-                'stops': [
-                  [14, 1],
-                  [15, 0]
-                ]
-              }
+        map.addLayer({
+          'id': 'volunteers-heat',
+          'type': 'heatmap',
+          'source': 'volunteers',
+          'maxzoom': 15,
+          'paint': {
+            'heatmap-weight': {
+              'property': 'count',
+              'type': 'exponential',
+              'stops': [
+                [0, 0],
+                [250, 10],
+                [500, 20],
+                [750, 30],
+                [1000, 40],
+                [1300, 50],
+                [1700, 60]
+              ]
+            },
+            'heatmap-intensity': {
+              'stops': [
+                [11, 1],
+                [15, 3]
+              ]
+            },
+            'heatmap-color': [
+              'interpolate',
+              ['linear'],
+              ['heatmap-density'],
+              0,
+              'rgba(245, 183, 177, 0)',
+              0.2,
+              'rgb(241, 148, 138)',
+              0.4,
+              'rgb(236, 112, 99)',
+              0.6,
+              'rgb(231, 76, 60)',
+              0.8,
+              'rgb(203, 67, 53)',
+              1,
+              'rgb(176, 58, 46)'
+            ],
+            'heatmap-radius': {
+              'stops': [
+                [0, 5],
+                [5, 6],
+                [6, 7],
+                [7, 8],
+                [8, 9],
+                [9, 10],
+                [10, 11],
+                [11, 12],
+                [12, 13],
+                [13, 14],
+                [14, 15],
+                [15, 16]
+              ]
+            },
+            'heatmap-opacity': {
+              'default': 1,
+              'stops': [
+                [14, 1],
+                [15, 0]
+              ]
             }
-          },
-          'waterway-label'
-        );
+          }
+        }, 'waterway-label');
 
-        // donations heatmap points layer
-        map.addLayer(
-          {
-            'id': 'donations-point',
-            'type': 'circle',
-            'source': 'donations',
-            'minzoom': 14,
-            'paint': {
-              // increase the radius of the circle as the zoom level and count value increases
-              'circle-radius': {
-                'property': 'count',
-                'type': 'exponential',
-                'stops': [
-                  [{ zoom: 15, value: 1 }, 20],
-                  [{ zoom: 15, value: 10 }, 40],
-                  [{ zoom: 22, value: 1 }, 40],
-                  [{ zoom: 22, value: 10 }, 80]
-                ]
-              },
-              'circle-color': {
-                'property': 'count',
-                'type': 'exponential',
-                'stops': [
-                  [0, 'rgb(217, 252, 210)'],
-                  [250, 'rgb(194, 247, 183)'],
-                  [500, 'rgb(138, 229, 120)'],
-                  [750, 'rgb(117, 218, 97)'],
-                  [1000, 'rgb(92, 205, 69)'],
-                  [1300, 'rgb(62, 192, 36)'],
-                  [1700, 'rgb(28, 142, 6)']
-                ]
-              },
-              'circle-stroke-color': 'green',
-              'circle-stroke-width': 1,
-              'circle-opacity': {
-                'stops': [
-                  [14, 0],
-                  [15, 1]
-                ]
-              }
+        map.addLayer({
+          'id': 'donations-point',
+          'type': 'circle',
+          'source': 'donations',
+          'minzoom': 15,
+          'paint': {
+            'circle-radius': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              15, ['+', ['ln', ['+', ['get', 'count'], 1]], 15],
+              17, ['+', ['ln', ['+', ['get', 'count'], 1]], 25],
+              20, ['+', ['ln', ['+', ['get', 'count'], 1]], 35],
+              21, ['+', ['ln', ['+', ['get', 'count'], 1]], 40],
+              22, ['+', ['ln', ['+', ['get', 'count'], 1]], 50]
+            ],
+            'circle-color': {
+              'property': 'count',
+              'type': 'exponential',
+              'stops': [
+                [0, 'rgb(217, 252, 210)'],
+                [250, 'rgb(194, 247, 183)'],
+                [500, 'rgb(138, 229, 120)'],
+                [750, 'rgb(117, 218, 97)'],
+                [1000, 'rgb(92, 205, 69)'],
+                [1300, 'rgb(62, 192, 36)'],
+                [1700, 'rgb(28, 142, 6)']
+              ]
+            },
+            'circle-stroke-color': 'transparent',
+            'circle-stroke-width': 10,
+            'circle-opacity': {
+              'stops': [
+              [14, 0],
+              [15, 0.4],
+              [17, 0.6],
+              [20, 0.8],
+              [22, 1]
+              ]
             }
-          },
-          'waterway-label'
-        );
+          }
+        }, 'waterway-label');
 
-        // volunteers donations heatmap points layer
-        map.addLayer(
-          {
-            'id': 'volunteers-point',
-            'type': 'circle',
-            'source': 'volunteers',
-            'minzoom': 14,
-            'paint': {
-              // increase the radius of the circle as the zoom level and count value increases
-              'circle-radius': {
-                'property': 'count',
-                'type': 'exponential',
-                'stops': [
-                  [{ zoom: 15, value: 1 }, 20],
-                  [{ zoom: 15, value: 10 }, 40],
-                  [{ zoom: 22, value: 1 }, 40],
-                  [{ zoom: 22, value: 10 }, 80]
-                ]
-              },
-              'circle-color': {
-                'property': 'count',
-                'type': 'exponential',
-                'stops': [
-                  [0, 'rgb(250, 219, 216)'],
-                  [250, 'rgb(245, 183, 177)'],
-                  [500, 'rgb(241, 148, 138)'],
-                  [750, 'rgb(236, 112, 99)'],
-                  [1000, 'rgb(231, 76, 60)'],
-                  [1300, 'rgb(203, 67, 53)'],
-                  [1700, 'rgb(176, 58, 46)']
-                ]
-              },
-              'circle-stroke-color': 'red',
-              'circle-stroke-width': 1,
-              'circle-opacity': {
-                'stops': [
-                  [14, 0],
-                  [15, 1]
-                ]
-              }
+        map.addLayer({
+          'id': 'volunteers-point',
+          'type': 'circle',
+          'source': 'volunteers',
+          'minzoom': 15,
+          'paint': {
+            'circle-radius': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              15, ['+', ['ln', ['+', ['get', 'count'], 1]], 10],
+              17, ['+', ['ln', ['+', ['get', 'count'], 1]], 20],
+              20, ['+', ['ln', ['+', ['get', 'count'], 1]], 30]
+            ],
+            'circle-color': {
+              'property': 'count',
+              'type': 'exponential',
+              'stops': [
+                [0, 'rgb(250, 219, 216)'],
+                [250, 'rgb(245, 183, 177)'],
+                [500, 'rgb(241, 148, 138)'],
+                [750, 'rgb(236, 112, 99)'],
+                [1000, 'rgb(231, 76, 60)'],
+                [1300, 'rgb(203, 67, 53)'],
+                [1700, 'rgb(176, 58, 46)']
+              ]
+            },
+            'circle-stroke-color': 'transparent',
+            'circle-stroke-width': 10,
+            'circle-opacity': {
+              'stops': [
+              [14, 0],
+              [15, 0.4],
+              [17, 0.6],
+              [20, 0.8],
+              [22, 1]
+              ]
             }
-          },
-          'waterway-label'
-        );
-
-
+          }
+        }, 'waterway-label');
       });
 
-      // click on tree to view count in a popup
       map.on('click', 'donations-point', (event) => {
+        const coordinates = event.features[0].geometry.coordinates;
+        const count = event.features[0].properties.count;
+        const zipcode = event.features[0].properties.zipcode;
         new mapboxgl.Popup()
-          .setLngLat(event.features[0].geometry.coordinates)
-          .setHTML(`<strong>Donations:</strong> ${event.features[0].properties.count}`)
-          .addTo(map);
+          .setLngLat(coordinates)
+          .setHTML(`
+            <strong>Donations:</strong> <span style="color: rgb(0, 202, 74); font-weight: bold;">${count}</span><br>
+            <strong>Zipcode:</strong> ${zipcode}<br>
+            <strong>Coordinates:</strong> ${coordinates[0].toFixed(6)}, ${coordinates[1].toFixed(6)}
+          `)
+        .addTo(map);
       });
 
-      // click on tree to view count in a popup
       map.on('click', 'volunteers-point', (event) => {
+        const coordinates = event.features[0].geometry.coordinates;
+        const count = event.features[0].properties.count;
+        const zipcode = event.features[0].properties.zipcode;
         new mapboxgl.Popup()
-          .setLngLat(event.features[0].geometry.coordinates)
-          .setHTML(`<strong>Volunteers:</strong> ${event.features[0].properties.count}`)
-          .addTo(map);
+          .setLngLat(coordinates)
+          .setHTML(`
+            <strong>Volunteers:</strong> <span style="color: rgb(213, 0, 0); font-weight: bold;">${count}</span><br>
+            <strong>Zipcode:</strong> ${zipcode}<br>
+            <strong>Coordinates:</strong> ${coordinates[0].toFixed(6)}, ${coordinates[1].toFixed(6)}
+          `)
+        .addTo(map);
       });
 
     </script>
