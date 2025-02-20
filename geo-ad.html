@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Creative</title>
+  <style>
+    /* Container styling */
+    #creative-container {
+      width: 300px;
+      height: 250px;
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto;
+      border: 1px solid #000; /* IAB-standard border */
+      background-color: #f0f0f0; /* Fallback background during load */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Ensure link fills the container and is clickable */
+    #creative-container a {
+      width: 100%;
+      height: 100%;
+      display: block;
+      text-decoration: none;
+    }
+
+    /* Image styling */
+    #creative-container img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover; /* Ensures image fills without distortion */
+    }
+
+    /* Hidden impression/click pixels */
+    .tracking-pixel {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="creative-container">
+    <!-- Placeholder until dynamic content loads -->
+    <img src="https://images.com/loading.png" alt="Loading..." width="300" height="250">
+  </div>
+
+  <script>
+    (function() {
+      // Fallback creative
+      const fallback = {
+        img: "https://images.com/fallback.png",
+        click: "https://givsly.com/values/fallback"
+      };
+
+      // Creative mappings
+      const creativeMap = {
+        "1": { img: "https://images.com/1.png", click: "https://givsly.com/values/1" },
+        "2": { img: "https://images.com/2.png", click: "https://givsly.com/values/2" },
+        "3": { img: "https://images.com/3.png", click: "https://givsly.com/values/3" }
+      };
+
+      // API endpoint
+      const apiUrl = "https://e.test.givsly.com/values?lat=40.846113&lon=-72.574816";
+      const impressionUrl = "https://e.test.givsly.com/impression";
+      const clickTrackingUrl = "https://e.test.givsly.com/click"; // Example click tracking URL
+
+      // Function to inject creative
+      function renderCreative(creativeData) {
+        const container = document.getElementById("creative-container");
+        container.innerHTML = ""; // Clear placeholder
+
+        // Create clickable link
+        const aTag = document.createElement("a");
+        aTag.href = creativeData.click;
+        aTag.target = "_blank";
+        aTag.rel = "noopener noreferrer"; // Security best practice
+
+        // Create image
+        const imgTag = document.createElement("img");
+        imgTag.src = creativeData.img;
+        imgTag.alt = "Ad Creative";
+        imgTag.width = 300;
+        imgTag.height = 250;
+
+        // Append elements
+        aTag.appendChild(imgTag);
+        container.appendChild(aTag);
+
+        // Add impression pixel
+        const impressionPixel = document.createElement("img");
+        impressionPixel.src = impressionUrl;
+        impressionPixel.className = "tracking-pixel";
+        container.appendChild(impressionPixel);
+
+        // Add click tracking (fires on click)
+        aTag.addEventListener("click", function() {
+          const clickPixel = document.createElement("img");
+          clickPixel.src = clickTrackingUrl;
+          clickPixel.className = "tracking-pixel";
+          document.body.appendChild(clickPixel); // Append to body to ensure it fires
+        });
+      }
+
+      // Fetch API data
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) throw new Error("Network response was not ok");
+          return response.json();
+        })
+        .then(data => {
+          const v1 = data.v1;
+          const creativeData = creativeMap[v1] || fallback;
+          renderCreative(creativeData);
+        })
+        .catch(error => {
+          console.error("Error fetching API data:", error);
+          renderCreative(fallback); // Render fallback on error
+        });
+    })();
+  </script>
+</body>
+</html>
