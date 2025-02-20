@@ -59,10 +59,10 @@
         "11": { img: "https://www.gourmetads.com/wp-content/uploads/2023/06/300x250-uber-eats.gif", click: "https://www.ubereats.com/" }
       };
 
-      // API endpoint
-      const apiUrl = "https://e.test.givsly.com/values?lat=40.846113&lon=-72.574816";
+      // Base API endpoint (without lat/lon hardcoded)
+      const baseApiUrl = "https://e.test.givsly.com/values";
       const impressionUrl = "https://e.test.givsly.com/impression";
-      const clickTrackingUrl = "https://e.test.givsly.com/click"; // Example click tracking URL
+      const clickTrackingUrl = "https://e.test.givsly.com/click";
 
       // Function to inject creative
       function renderCreative(creativeData) {
@@ -73,11 +73,11 @@
         const aTag = document.createElement("a");
         aTag.href = creativeData.click;
         aTag.target = "_blank";
-        aTag.rel = "noopener noreferrer"; // Security best practice
+        aTag.rel = "noopener noreferrer";
 
         // Create image
         const imgTag = document.createElement("img");
-        imgTag.id = "banner"
+        imgTag.id = "banner";
         imgTag.src = creativeData.img;
         imgTag.alt = "Ad Creative";
         imgTag.width = 300;
@@ -89,35 +89,58 @@
 
         // Add impression pixel
         const impressionPixel = document.createElement("img");
-        impressionPixel.id = "imppix"
+        impressionPixel.id = "imppix";
         impressionPixel.src = impressionUrl;
         impressionPixel.className = "tracking-pixel";
         container.appendChild(impressionPixel);
 
-        // Add click tracking (fires on click)
+        // Add click tracking
         aTag.addEventListener("click", function() {
           const clickPixel = document.createElement("img");
           clickPixel.src = clickTrackingUrl;
           clickPixel.className = "tracking-pixel";
-          document.body.appendChild(clickPixel); // Append to body to ensure it fires
+          document.body.appendChild(clickPixel);
         });
       }
 
-      // Fetch API data
-      fetch(apiUrl)
-        .then(response => {
-          if (!response.ok) throw new Error("Network response was not ok");
-          return response.json();
-        })
-        .then(data => {
-          const v1 = data.v1;
-          const creativeData = creativeMap[v1] || fallback;
-          renderCreative(creativeData);
-        })
-        .catch(error => {
-          console.error("Error fetching API data:", error);
-          renderCreative(fallback); // Render fallback on error
-        });
+      // Function to fetch API data with dynamic lat/lon
+      function fetchCreative(lat, lon) {
+        const apiUrl = `${baseApiUrl}?lat=${lat}&lon=${lon}`;
+        fetch(apiUrl)
+          .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.json();
+          })
+          .then(data => {
+            const v1 = data.v1;
+            const creativeData = creativeMap[v1] || fallback;
+            renderCreative(creativeData);
+          })
+          .catch(error => {
+            console.error("Error fetching API data:", error);
+            renderCreative(fallback); // Fallback on error
+          });
+      }
+
+      // Get user's geolocation
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            fetchCreative(lat, lon); // Fetch with user's coordinates
+          },
+          (error) => {
+            console.error("Geolocation error:", error);
+            // Fallback to default coordinates if geolocation fails or is denied
+            fetchCreative(40.846113, -72.574816);
+          }
+        );
+      } else {
+        console.error("Geolocation not supported by this browser.");
+        // Fallback to default coordinates if geolocation isn’t supported
+        fetchCreative(40.846113, -72.574816);
+      }
     })();
   </script>
 </body>
