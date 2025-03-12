@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Celtra Ad Preview with Session Storage</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      font-family: monospace;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    input[type="text"] {
+      width: 200px;
+      padding: 5px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+    .preview {
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      padding: 20px;
+      text-align: center;
+      overflow: auto;
+      position: relative;
+      height: 400px;
+    }
+    /* Wrapper that scales down the preview ad */
+    #adPreviewContent {
+      transform: scale(0.5);
+      transform-origin: top left;
+      width: 200%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Celtra Ad Preview</h1>
+    <div>
+      <label for="celtraScript"><strong>Enter Celtra Script Tag:</strong></label><br>
+      <textarea id="celtraScript" placeholder="Paste your Celtra script tag here..."></textarea>
+    </div>
+    <div>
+      <label for="zipCode"><strong>Enter New ZIP Code:</strong></label>
+      <input type="text" id="zipCode" placeholder="ZIP Code">
+      <button id="previewButton">Preview Ad</button>
+    </div>
+    <!-- Preview container -->
+    <div id="adPreview" class="preview">
+      <!-- Inner wrapper that scales the content -->
+      <div id="adPreviewContent">
+        <!-- The updated ad will be inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // On page load, load any saved values from session storage
+    window.addEventListener('DOMContentLoaded', function() {
+      var savedScript = sessionStorage.getItem("celtraScript");
+      var savedZip = sessionStorage.getItem("zipCode");
+      if (savedScript) {
+        document.getElementById("celtraScript").value = savedScript;
+      }
+      if (savedZip) {
+        document.getElementById("zipCode").value = savedZip;
+      }
+    });
+
+    document.getElementById('previewButton').addEventListener('click', function() {
+      // Get the raw ad code and the ZIP code from the user inputs.
+      var scriptContent = document.getElementById('celtraScript').value;
+      var zipCode = document.getElementById('zipCode').value;
+
+      // Store the current values in session storage
+      sessionStorage.setItem("celtraScript", scriptContent);
+      sessionStorage.setItem("zipCode", zipCode);
+
+      // Replace every occurrence of the ${POSTAL_CODE} macro with the entered ZIP code.
+      var updatedScript = scriptContent.replace(/\$\{POSTAL_CODE\}/g, zipCode);
+
+      // Insert the updated ad code into the preview content container.
+      document.getElementById('adPreviewContent').innerHTML = updatedScript;
+    });
+  </script>
+</body>
+</html>
