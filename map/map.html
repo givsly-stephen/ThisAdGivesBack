@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map To🌎l</title>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css" rel="stylesheet">
+    <style>
+        :root {
+            --ruler: 16px;
+            --color-red: #FFA500;
+            --color-bg: #EBECF0;
+            --color-shadow: #fcfcfc;
+            --color-white: #FFF;
+            --color-orange: #FFBF00;
+            --color-hover: #FBB117;
+            --color-active: #FFA500;
+        }
+
+        body, html {
+            background-color: var(--color-bg);
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: -0.2px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .mapboxgl-popup-content {
+            background-color: #ffffff;
+            color: #131313;
+            font-size: 12px;
+            text-shadow: 2px 2px 4px rgba(64, 64, 64, 0.25);
+            padding: 2px 6px 2px 6px;
+            border: none;
+            border-radius: 9px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .popup-style-close-button .mapboxgl-popup-content {
+            padding-top: 4px;
+            padding-right: 20px;
+        }
+
+        .upload-button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+        }
+
+        .upload-button {
+            background-color: var(--color-orange);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(64, 64, 64, 0.35);
+            padding: 8px 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .upload-button:hover {
+            background-color: var(--color-hover);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            padding: 8.35px 8.35px;
+        }
+
+        .upload-button:active {
+            background-color: var(--color-active);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+            transform: translateY(2px);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .error-message {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #5e5e5e;
+            color: #fbfbfb;
+            padding: 7px 7px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            box-shadow: 0 10px 12px rgba(71, 71, 71, 0.3);
+            display: none;
+            z-index: 2;
+        }
+
+        body { margin: 0; padding: 0; }
+        #map { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div class="upload-button-container">
+        <label for="file-input" class="upload-button">Upload File</label>
+        <input type="file" id="file-input" accept=".xlsx">
+    </div>
+
+    <div id="error-message" class="error-message"></div>
+    <div id="map"></div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZ2l2c2x5IiwiYSI6ImNsdGRpNmFzNDAybWkyd3JuNnRreTZoNDEifQ.Ls8coxMMl0dr0vqxNE8B-Q';
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v11', 
+            center: [-95, 37],
+            zoom: 3
+        });
+
+        const US_STATES_MAP = {
+            "AL": "Alabama",
+            "AK": "Alaska",
+            "AZ": "Arizona",
+            "AR": "Arkansas",
+            "CA": "California",
+            "CO": "Colorado",
+            "CT": "Connecticut",
+            "DE": "Delaware",
+            "FL": "Florida",
+            "GA": "Georgia",
+            "HI": "Hawaii",
+            "ID": "Idaho",
+            "IL": "Illinois",
+            "IN": "Indiana",
+            "IA": "Iowa",
+            "KS": "Kansas",
+            "KY": "Kentucky",
+            "LA": "Louisiana",
+            "ME": "Maine",
+            "MD": "Maryland",
+            "MA": "Massachusetts",
+            "MI": "Michigan",
+            "MN": "Minnesota",
+            "MS": "Mississippi",
+            "MO": "Missouri",
+            "MT": "Montana",
+            "NE": "Nebraska",
+            "NV": "Nevada",
+            "NH": "New Hampshire",
+            "NJ": "New Jersey",
+            "NM": "New Mexico",
+            "NY": "New York",
+            "NC": "North Carolina",
+            "ND": "North Dakota",
+            "OH": "Ohio",
+            "OK": "Oklahoma",
+            "OR": "Oregon",
+            "PA": "Pennsylvania",
+            "RI": "Rhode Island",
+            "SC": "South Carolina",
+            "SD": "South Dakota",
+            "TN": "Tennessee",
+            "TX": "Texas",
+            "UT": "Utah",
+            "VT": "Vermont",
+            "VA": "Virginia",
+            "WA": "Washington",
+            "WV": "West Virginia",
+            "WI": "Wisconsin",
+            "WY": "Wyoming",
+            "DC": "District of Columbia",
+            "AS": "American Samoa",
+            "GU": "Guam",
+            "MP": "Northern Mariana Islands",
+            "PR": "Puerto Rico",
+            "VI": "Virgin Islands",
+            "UM": "Minor Outlying Islands"
+        };
+
+        let hoveredStateId = null;
+        let popupState = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
+
+        function loadStates(geojsonPath) {
+            fetch(geojsonPath)
+                .then(response => response.json())
+                .then(data => {
+                    data.features.forEach((feature, index) => {
+                        if (!feature.id) {
+                            feature.id = index;
+                        }
+                    });
+
+                    if (map.getSource('state-source')) {
+                        map.removeLayer('state-fill');
+                        map.removeLayer('state-border');
+                        map.removeSource('state-source');
+                    }
+
+                    map.addSource('state-source', {
+                        type: 'geojson',
+                        data: data
+                    });
+
+                    map.addLayer({
+                        id: "state-fill",
+                        type: "fill",
+                        source: "state-source",
+                        paint: {
+                            "fill-color": "#50462f",
+                            "fill-opacity": [
+                                "case",
+                                ["boolean", ["feature-state", "hover"], false], 
+                                1.25,
+                                0
+                            ]
+                        }
+                    });
+
+                    map.addLayer({
+                        id: "state-border",
+                        type: "line",
+                        source: "state-source",
+                        paint: {
+                            "line-color": [
+                                "interpolate",
+                                ["linear"],
+                                ["zoom"],
+                                2, "#3e3623",
+                                8, "#52472e",
+                                15, "#645638"
+                            ],
+                            "line-width": [
+                                "interpolate",
+                                ["linear"],
+                                ["zoom"],
+                                2, 0.5,
+                                8, 1.75,
+                                15, 2
+                            ]
+                        }
+                    });
+
+                    map.on('mousemove', 'state-fill', function (e) { 
+                        const zoom = map.getZoom();
+                        if (zoom < 4 || zoom > 6) {
+                            return;
+                        }
+                        
+                        const newFeatureId = e.features[0].id;
+                        const feature = e.features[0];
+
+                        if (hoveredStateId !== newFeatureId) {
+                            if (hoveredStateId !== null) {
+                                map.setFeatureState(
+                                    { source: 'state-source', id: hoveredStateId },
+                                    { hover: false }
+                                );
+                            }
+
+                            map.setFeatureState(
+                                { source: 'state-source', id: newFeatureId },
+                                { hover: true }
+                            );
+
+                            hoveredStateId = newFeatureId;
+                        }
+
+                        let state = US_STATES_MAP[feature.properties.s];
+
+                        if (state === undefined) {
+                            state = "unknown";
+                        }
+
+                        if (feature.properties.s) {
+                            popupState
+                                .setLngLat(e.lngLat)
+                                .setHTML(`${state} (${feature.properties.s})`)
+                                .addTo(map);
+                        }
+                    });
+
+                    map.on('mouseleave', 'state-fill', function () {
+                        const zoom = map.getZoom();
+                        if (zoom < 4 || zoom > 6) return;
+
+                        if (hoveredStateId !== null) {
+                            map.setFeatureState(
+                                { source: 'state-source', id: hoveredStateId },
+                                { hover: false }
+                            );
+                            hoveredStateId = null;
+                        }
+
+                        popupState.remove();
+                    });
+
+                    map.on('zoom', () => {
+                        const zoom = map.getZoom();
+                        if (zoom < 4 || zoom > 6) {
+                            if (hoveredStateId !== null) {
+                            map.setFeatureState(
+                                { source: 'state-source', id: hoveredStateId },
+                                { hover: false }
+                            );
+                            hoveredStateId = null;
+                        }
+                            popupState.remove(); 
+                        }
+                    });
+                })
+                .catch(error => console.error("Error loading polygons:", error));
+        }
+
+        let hoveredCountyId = null;
+        let popupCounty = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
+
+        function loadCounties(geojsonPath) {
+            fetch(geojsonPath)
+                .then(response => response.json())
+                .then(data => {
+                    data.features.forEach((feature, index) => {
+                        if (!feature.id) {
+                            feature.id = index;
+                        }
+                    });
+
+                    if (map.getSource('county-source')) {
+                        map.removeLayer('county-fill');
+                        map.removeLayer('county-border');
+                        map.removeSource('county-source');
+                    }
+
+                    map.addSource('county-source', {
+                        type: 'geojson',
+                        data: data
+                    });
+
+                    map.addLayer({
+                        id: "county-fill",
+                        type: "fill",
+                        source: "county-source",
+                        paint: {
+                            "fill-color": "#50462f",
+                            "fill-opacity": [
+                                "case",
+                                ["boolean", ["feature-state", "hover"], false], 
+                                0.4,
+                                0
+                            ]
+                        }
+                    });
+
+                    map.addLayer({
+                        id: "county-border",
+                        type: "line",
+                        source: "county-source",
+                        paint: {
+                            "line-color": [
+                                "interpolate",
+                                ["linear"],
+                                ["zoom"],
+                                2, "#3e3623",
+                                8, "#52472e",
+                                15, "#645638"
+                            ],
+                            "line-width": [
+                                "interpolate",
+                                ["linear"],
+                                ["zoom"],
+                                2, 0.01,
+                                8, 0.75,
+                                15, 1
+                            ]
+                        }
+                    });
+
+                    map.on('mousemove', 'county-fill', function (e) { 
+                        const zoom = map.getZoom();
+                        if (zoom < 6 || zoom > 11) {
+                            return;
+                        }
+                        
+                        const newFeatureId = e.features[0].id;
+                        const feature = e.features[0];
+
+                        if (hoveredCountyId !== newFeatureId) {
+                            if (hoveredCountyId !== null) {
+                                map.setFeatureState(
+                                    { source: 'county-source', id: hoveredCountyId },
+                                    { hover: false }
+                                );
+                            }
+
+                            map.setFeatureState(
+                                { source: 'county-source', id: newFeatureId },
+                                { hover: true }
+                            );
+
+                            hoveredCountyId = newFeatureId;
+                        }
+
+                        if (feature.properties.c) {
+                            popupCounty
+                                .setLngLat(e.lngLat)
+                                .setHTML(`${feature.properties.c}`)
+                                .addTo(map);
+                        }
+                    });
+
+                    map.on('mouseleave', 'county-fill', function () {
+                        const zoom = map.getZoom();
+                        if (zoom < 6 || zoom > 11) return;
+
+                        if (hoveredCountyId !== null) {
+                            map.setFeatureState(
+                                { source: 'county-source', id: hoveredCountyId },
+                                { hover: false }
+                            );
+                            hoveredCountyId = null;
+                        }
+
+                        popupCounty.remove();
+                    });
+
+                    map.on('zoom', () => {
+                        const zoom = map.getZoom();
+                        if (zoom < 6 || zoom > 11) {
+                            if (hoveredCountyId !== null) {
+                            map.setFeatureState(
+                                { source: 'county-source', id: hoveredCountyId },
+                                { hover: false }
+                            );
+                            hoveredCountyId = null;
+                        }
+                            popupCounty.remove(); 
+                        }
+                    });
+                })
+                .catch(error => console.error("Error loading polygons:", error));
+        }
+
+        let mapLoaded = false;
+        let resetFile = false;
+        let existingSource;
+
+        let popupsCluster = [];
+        let popupsPoints = [];
+
+        let listenerRegistry = [];
+
+        const validAttributes = {
+            zipcode: "zip",
+            dma_code: "dma code",
+            dma_info: "dma",
+            avg_population: "avg. population",
+            households: "households",
+            type: "zip type",
+            primary_city: "primary city",
+            state: "state",
+            county: "county",
+            country: "country",
+            population_center_latitude: "lat",
+            population_center_longitude: "lng",
+            white: "white population",
+            black_or_african_american: "black population",
+            american_indian_or_alaskan_native: "indian & alaskan population",
+            asian: "asian population",
+            native_hawaiian_and_other_pacific_islander: "islander population",
+            other_race: "other race population",
+            two_or_more_races: "more races population",
+            hispanic_or_latino: "hispanic & latino",
+            total_male_population: "male population",
+            total_female_population: "female population",
+            pop_under_10: "population under 19",
+            pop_10_to_19: "population 10 → 19",
+            pop_20_to_29: "population 20 → 29",
+            pop_30_to_39: "population 30 → 39",
+            pop_40_to_49: "population 40 → 49",
+            pop_50_to_59: "population 50 → 59",
+            pop_60_to_69: "population 60 → 69",
+            pop_70_to_79: "population 70 → 79",
+            pop_80_plus: "population 80+",
+            percent_population_in_poverty: "in poverty (%)",
+            median_earnings_past_year: "median earnings (year)",
+            median_household_income: "median household income",
+            percent_high_school_graduate: "high school (%)",
+            percent_bachelors_degree: "bachelor (%)",
+            percent_graduate_degree: "graduate degree (%)",
+            weight: "contribution", 
+            score: "contribution score",
+            engagement_density: "engagement",
+            active_population: "active population"
+        };
+
+        function xlsxToGeoJSON(file) {
+            return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+                reader.onload = (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                        if (rows.length === 0) {
+                            return reject("Empty xlsx datasource file");
+                        }
+
+                        const header = rows[0];
+                        const attributeToColumn = {};
+                        const columnToAttribute = {};
+                        header.forEach((attribute, column) => {
+                            if (!attribute) return;
+                            if(validAttributes[attribute]){     
+                                attributeToColumn[attribute] = column
+                                columnToAttribute[column] = attribute
+                            }
+                        });
+
+                        const latAttribute = attributeToColumn.population_center_latitude;
+                        const lngAttribute = attributeToColumn.population_center_longitude;
+                        if (latAttribute === undefined || lngAttribute === undefined) {
+                            return reject("Missing lat, lng attributes");
+                        }
+
+                        const features = [];
+                        for (let i = 1; i < rows.length; i++) {
+                            const row = rows[i];
+                            if (!row || row.length === 0) continue;
+
+                            const lat = parseFloat(row[latAttribute]);
+                            const lng = parseFloat(row[lngAttribute]);
+                            if (isNaN(lat) || isNaN(lng)) {
+                                continue;
+                            }
+
+                            const properties = {};
+                            row.forEach((value, column) => {
+                                if(columnToAttribute[column]) {
+                                    if (value !== undefined && value !== '') {
+                                        properties[columnToAttribute[column]] = value 
+                                    }
+                                }
+                            });
+
+                            features.push({
+                                type: "Feature",
+                                geometry: {
+                                    type: "Point",
+                                    coordinates: [lng, lat]
+                                },
+                                properties
+                            });
+                        }
+
+                        resolve({
+                            type: "FeatureCollection",
+                            features
+                        });
+
+                    } catch (err) {
+                        reject("Failed to read xlsx: " + err.message);
+                    }
+                };
+
+                reader.onerror = () => reject("Datasource file read error");
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        function resetMap() {
+            if (existingSource) {
+                if (map.getLayer(`${existingSource}-circle-layer`)) {
+                    map.removeLayer(`${existingSource}-circle-layer`);
+                }
+                if (map.getLayer(`${existingSource}-clusters`)) {
+                    map.removeLayer(`${existingSource}-clusters`);
+                }
+                if (map.getLayer(`${existingSource}-cluster-count`)) {
+                    map.removeLayer(`${existingSource}-cluster-count`);
+                }
+                if (map.getSource(existingSource)) {
+                    map.removeSource(existingSource);
+                }
+
+                listenerRegistry.forEach(({ event, layer, handler }) => {
+                    if (layer) {
+                        map.off(event, layer, handler);
+                    } else {
+                        map.off(event, handler);
+                    }
+                });
+                listenerRegistry = [];
+                existingSource = null;
+            }
+
+            map.setCenter([-95, 37]);
+            map.setZoom(3);
+
+            popupsCluster.forEach(popup => popup.remove());
+            popupsPoints.forEach(popup => popup.remove());
+            popupsCluster = [];
+            popupsPoints = [];
+        }
+
+        map.on('load', () => {
+            document.getElementById('file-input').addEventListener('change', async function(event) {  
+                const file = event.target.files[0];
+                const errorMessage = document.getElementById('error-message');
+
+                if (!file) {
+                    return;
+                }
+
+                if (!file.name.endsWith('.xlsx')) {
+                    errorMessage.textContent = "⚠️ Error: Invalid source file - Upload a .xlsx file";
+                    errorMessage.style.display = "block";
+                    setTimeout(() => {
+                        errorMessage.style.display = "none";
+                    }, 3100);
+
+                    event.target.value = '';
+                    return;
+                }
+
+                if (resetFile) {
+                    resetMap();
+                } else {
+                    resetFile = true;
+                }
+
+                errorMessage.textContent = "🔄 Uploading Data";
+                errorMessage.style.display = "block";
+
+                if (!mapLoaded) {
+                    mapLoaded = true;
+                    await Promise.all([
+                        loadCounties('./county.geojson'),
+                        loadStates('./state.geojson')
+                    ]);
+                }
+
+                event.target.value = '';
+                const source = file.name.replace('.xlsx', '');
+                existingSource = source;
+
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    try {
+                        const geojson = await xlsxToGeoJSON(file);
+
+                        geojson.features.forEach((feature, index) => {
+                             feature.properties.weight = parseFloat(feature.properties.weight) || 0;
+                             feature.properties.id = index;
+                        });
+
+                        if (map.getSource(source)) {
+                            map.removeSource(source);
+                        }
+
+                        map.addSource(source, {
+                            type: 'geojson',
+                            data: geojson,
+                            cluster: true,
+                            clusterMaxZoom: 3,
+                            clusterRadius: 25,
+                            clusterProperties: {
+                                'weight_sum': ['+', ['get', 'weight']]
+                            }
+                        });
+
+                        map.addLayer({
+                            id: `${source}-circle-layer`,
+                            type: 'circle',
+                            source: source,
+                            paint: {
+                                'circle-radius': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['get', 'weight'],
+                                    100, 1,
+                                    500, 1.25,
+                                    1000, 1.5,
+                                    5000, 1.75,
+                                    10000, 2,
+                                    25000, 2.25,
+                                    50000, 2.5,
+                                    75000, 2.75,
+                                    100000, 3,
+                                    250000, 3.25,
+                                    500000, 3.5,
+                                    750000, 3.75,
+                                    1000000, 4,
+                                    2500000, 4.25,
+                                    5000000, 4.5,
+                                    7500000, 4.75,
+                                    10000000, 5,
+                                    25000000, 5.25,
+                                    50000000, 5.5,
+                                    75000000, 5.75,
+                                    100000000, 7,
+                                ],
+                                'circle-color': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['get', 'weight'],
+                                    100, "#ffeecf",
+                                    500, "#ffdfa8",
+                                    1000, "#ffd77b",
+                                    5000, "#ffd77b",
+                                    10000, "#ffce5f",
+                                    25000, "#ffc642",
+                                    50000, "#ffbd26",
+                                    75000, "#ffb50c",
+                                    100000, "#ffa60b",
+                                    250000, "#ff970b",
+                                    500000, "#ff880b",
+                                    750000, "#ee7e00",
+                                    1000000, "#ff6800",
+                                    2500000, "#ff5500",
+                                    5000000, "#ff4600",
+                                    7500000, "#e73f00",
+                                    10000000, "#d23a00",
+                                    25000000, "#bf3400",
+                                    50000000, "#ae2f00",
+                                    75000000, "#9b2a00",
+                                    100000000, "#8b0101",
+                                ],
+                                'circle-opacity': 0.6
+                            },
+                            layout: {
+                                'circle-sort-key': ['get', 'weight']
+                            }
+                        });
+
+                        map.addLayer({
+                            id: `${source}-clusters`,
+                            type: 'circle',
+                            source: source,
+                            filter: ['has', 'point_count'],
+                            paint: {
+                                'circle-color': [
+                                    'step',
+                                    ['get', 'weight_sum'],
+                                    "#ffeecf", 100,
+                                    "#ffdfa8", 500,
+                                    "#ffd77b", 1000,
+                                    "#ffd77b", 5000,
+                                    "#ffce5f", 10000,
+                                    "#ffc642", 25000,
+                                    "#ffbd26", 50000,
+                                    "#ffb50c", 75000,
+                                    "#ffa60b", 100000,
+                                    "#ff970b", 250000,
+                                    "#ff880b", 500000,
+                                    "#ee7e00", 750000,
+                                    "#ff6800", 1000000,
+                                    "#ff5500", 2500000,
+                                    "#ff4600", 5000000,
+                                    "#e73f00", 7500000,
+                                    "#d23a00", 10000000,
+                                    "#bf3400", 25000000,
+                                    "#ae2f00", 50000000,
+                                    "#9b2a00", 75000000,
+                                    "#8b0101"
+                                ],
+                                'circle-radius': [
+                                    'step',
+                                    ['get', 'weight_sum'],
+                                    13, 100,
+                                    13, 500,
+                                    13, 1000,
+                                    13, 5000,
+                                    14, 10000,
+                                    14, 25000,
+                                    14, 50000,
+                                    14, 75000,
+                                    15, 100000,
+                                    15, 250000,
+                                    15, 500000,
+                                    15, 750000,
+                                    16, 1000000,
+                                    16, 2500000,
+                                    16, 5000000,
+                                    16, 7500000,
+                                    17, 10000000,
+                                    17, 25000000,
+                                    17, 50000000,
+                                    17, 75000000,
+                                    18
+                                ]
+                            }
+                        });
+
+                        map.addLayer({
+                            id: `${source}-cluster-count`,
+                            type: 'symbol',
+                            source: source,
+                            filter: ['has', 'point_count'],
+                            layout: {
+                                'text-field': ['get', 'point_count'],
+                                "text-font": ["DIN Offc Pro Bold", "Arial Unicode MS Bold"],
+                                'text-size': 11.5
+                            },
+                            paint: {
+                                'text-color': '#ffffff',
+                                'text-halo-width': 0.9,
+                                'text-halo-color': '#303030'
+                            }
+                        });
+
+                        let maxZoom = false;
+                        let clickedClusters = {};
+                        let clickedPoints = {};
+
+                        function updateCircleRadius() {
+                            const zoom = map.getZoom();
+                            let radius;
+
+                            if (zoom > 11 && !maxZoom) {
+                                popupsPoints.forEach(popup => popup.remove());
+                                popupsPoints = [];
+
+                                maxZoom = true;
+
+                                map.setPaintProperty(`${source}-circle-layer`, 'circle-opacity', 0.9);
+
+                                radius = [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['get', 'weight'],
+                                    100, 6.25,
+                                    500, 6.75,
+                                    1000, 7,
+                                    5000, 7.25,
+                                    10000, 7.5,
+                                    25000, 7.75,
+                                    50000, 8,
+                                    75000, 8.25,
+                                    100000, 8.5,
+                                    250000, 8.75,
+                                    500000, 9,
+                                    750000, 9.25,
+                                    1000000, 9.5,
+                                    2500000, 9.75,
+                                    5000000, 10,
+                                    7500000, 10.25,
+                                    10000000, 10.5,
+                                    25000000, 10.75,
+                                    50000000, 11,
+                                    75000000, 11.25,
+                                    100000000, 12.5,
+                                ];
+
+                                map.setPaintProperty(`${source}-circle-layer`, 'circle-radius', radius);
+                                return;
+                            }
+
+                            if (zoom > 4 && zoom <= 11) {
+                                popupsCluster.forEach(popup => popup.remove());
+                                popupsPoints.forEach(popup => popup.remove());
+                                popupsCluster = [];
+                                popupsPoints = [];
+                                
+                                maxZoom = false;
+
+                                map.setPaintProperty(`${source}-circle-layer`, 'circle-opacity', 0.6);
+
+                                radius = [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['get', 'weight'],
+                                    100, 1,
+                                    500, 1.25,
+                                    1000, 1.5,
+                                    5000, 1.75,
+                                    10000, 2,
+                                    25000, 2.25,
+                                    50000, 2.5,
+                                    75000, 2.75,
+                                    100000, 3,
+                                    250000, 3.25,
+                                    500000, 3.5,
+                                    750000, 3.75,
+                                    1000000, 4,
+                                    2500000, 4.25,
+                                    5000000, 4.5,
+                                    7500000, 4.75,
+                                    10000000, 5,
+                                    25000000, 5.25,
+                                    50000000, 5.5,
+                                    75000000, 5.75,
+                                    100000000, 7,
+                                ];
+
+                                map.setLayoutProperty(`${source}-circle-layer`, 'visibility', 'visible');
+                                map.setPaintProperty(`${source}-circle-layer`, 'circle-radius', radius);
+
+                                clickedClusters = {};
+                                clickedPoints = {};
+                            }
+
+                            if (zoom <= 4) {
+                                map.setLayoutProperty(`${source}-circle-layer`, 'visibility', 'none');
+                            }
+                        }
+
+                        map.on('move', updateCircleRadius);
+                        listenerRegistry.push({ event: 'move', handler: updateCircleRadius });
+
+                        const clusterMouseEnter = () => {
+                            map.getCanvas().style.cursor = 'pointer';
+                        };
+
+                        map.on('mouseenter', `${source}-clusters`, clusterMouseEnter);
+                        listenerRegistry.push({ event: 'mouseenter', layer: `${source}-clusters`, handler: clusterMouseEnter });
+
+                        const clusterMouseLeave = () => {
+                            map.getCanvas().style.cursor = '';
+                        };
+
+                        map.on('mouseleave', `${source}-clusters`, clusterMouseLeave);
+                        listenerRegistry.push({ event: 'mouseleave', layer: `${source}-clusters`, handler: clusterMouseLeave });
+
+                        const pointMouseEnter = () => {
+                            const zoom = map.getZoom();
+                            if (zoom < 11) {
+                                return;
+                            }
+                            map.getCanvas().style.cursor = 'pointer';
+                        };
+
+                        map.on('mouseenter', `${source}-circle-layer`, pointMouseEnter);
+                        listenerRegistry.push({ event: 'mouseenter', layer: `${source}-circle-layer`, handler: pointMouseEnter });
+
+                        const pointMouseLeave = () => {
+                            map.getCanvas().style.cursor = '';
+                        };
+
+                        map.on('mouseleave', `${source}-circle-layer`, pointMouseLeave);
+                        listenerRegistry.push({ event: 'mouseleave', layer: `${source}-circle-layer`, handler: pointMouseLeave });
+
+                        const orderedKeys = [
+                            "zipcode",
+                            "type",
+                            "country",
+                            "state",
+                            "county",
+                            "primary_city",
+                            "avg_population",
+                            "active_population",
+                            "weight",
+                            "score",
+                            "engagement_density",
+                            "population_center_latitude",
+                            "population_center_longitude",
+                            "dma_code",
+                            "dma_info",
+                            "white",
+                            "black_or_african_american",
+                            "american_indian_or_alaskan_native",
+                            "asian",
+                            "native_hawaiian_and_other_pacific_islander",
+                            "other_race",
+                            "two_or_more_races",
+                            "hispanic_or_latino",
+                            "total_male_population",
+                            "total_female_population",
+                            "pop_under_10",
+                            "pop_10_to_19",
+                            "pop_20_to_29",
+                            "pop_30_to_39",
+                            "pop_40_to_49",
+                            "pop_50_to_59",
+                            "pop_60_to_69",
+                            "pop_70_to_79",
+                            "pop_80_plus",
+                            "percent_population_in_poverty",
+                            "median_earnings_past_year",
+                            "households",
+                            "median_household_income",
+                            "percent_high_school_graduate",
+                            "percent_bachelors_degree",
+                            "percent_graduate_degree",
+                        ];
+
+                        const zoomClusterClear = () => {
+                            const zoom = map.getZoom();
+                            if (zoom < 4) {
+                                popupsCluster.forEach(popup => popup.remove());
+                                popupsCluster = [];
+                            }
+                        };
+
+                        map.on('zoom', zoomClusterClear);
+                        listenerRegistry.push({ event: 'zoom', handler: zoomClusterClear });
+
+                        const clickCluster = (e) => {
+                            const clusterId = e.features[0].properties.cluster_id;
+                            let maxPoints = 500000;
+
+                            if (clickedClusters[clusterId]) {
+                                clickedClusters[clusterId].remove();
+                            }
+
+                            map.getSource(source).getClusterLeaves(clusterId, maxPoints, 0, (err, features) => {
+                                if (err) return;
+
+                                let total_weights = features.reduce((sum, feature) => sum + (feature.properties.weight || 0), 0);
+                                total_weights = total_weights.toFixed(3);
+
+                                const popup = new mapboxgl.Popup({ className: 'popup-style-close-button', closeButton: true, closeOnClick: false })
+                                    .setLngLat(e.lngLat)
+                                    .setHTML(`<strong>weights:</strong> ${total_weights} <br>`)
+                                    .addTo(map);
+
+                                popupsCluster.push(popup);
+                                clickedClusters[clusterId] = popup;
+                            });
+                        };
+
+                        map.on('click', `${source}-clusters`, clickCluster);
+                        listenerRegistry.push({ event: 'click', layer: `${source}-clusters`, handler: clickCluster });
+
+                        const clickClusterCleanup = (e) => {
+                            if (!map.queryRenderedFeatures(e.point, { layers: [`${source}-clusters`] }).length) {
+                                popupsCluster.forEach(popup => popup.remove());
+                                popupsCluster = [];
+                            }
+                        };
+
+                        map.on('click', clickClusterCleanup);
+                        listenerRegistry.push({ event: 'click', handler: clickClusterCleanup });
+
+                        const clickPoint = (e) => {
+                            const zoom = map.getZoom();
+                            if (zoom < 11) return;
+
+                            let pointID = e.features[0].properties.id;
+
+                            if (clickedPoints[pointID]) {
+                                clickedPoints[pointID].remove();
+                            }
+
+                            const properties = e.features[0].properties;
+                            let popupHTML = orderedKeys
+                                .filter(key => properties[key] !== undefined)
+                                .map(key => `<strong>${validAttributes[key]}:</strong> ${properties[key]}<br>`)
+                                .join('');
+
+                            const popup = new mapboxgl.Popup({ closeButton: true, closeOnClick: false })
+                                .setLngLat(e.lngLat)
+                                .setHTML(popupHTML)
+                                .addTo(map);
+
+                            popupsPoints.push(popup);
+                            clickedPoints[pointID] = popup;
+                        };
+
+                        map.on('click', `${source}-circle-layer`, clickPoint);
+                        listenerRegistry.push({ event: 'click', layer: `${source}-circle-layer`, handler: clickPoint });
+
+                        const clickPointCleanup = (e) => {
+                            const features = map.queryRenderedFeatures(e.point, { layers: [`${source}-circle-layer`] });
+                            if (features.length === 0) {
+                                popupsPoints.forEach(popup => popup.remove());
+                                popupsPoints = [];
+                            }
+                        };
+
+                        map.on('click', clickPointCleanup);
+                        listenerRegistry.push({ event: 'click', handler: clickPointCleanup });
+
+                        errorMessage.textContent = "☑️ Upload Complete";
+                        setTimeout(() => {
+                            errorMessage.style.display = "none";
+                        }, 3000);
+
+                    } catch (error) {
+                        console.error("Error loading xlsx data:", error);
+                        errorMessage.textContent = "⚠️ Error: Failed to parse xlsx";
+                        errorMessage.style.display = "block";
+                        setTimeout(() => {
+                            errorMessage.style.display = "none";
+                        }, 3100);
+                    }
+                };
+
+                reader.readAsText(file);         
+            });
+        });
+    </script>
+</body>
+</html>
